@@ -2,7 +2,7 @@ const jwt = require("jsonwebtoken");
 
 const signToken = async (userId, type, secret, expiresIn) => {
   const payload = {
-    sub: userId,
+    userId: userId,
     type: type,
   };
   return jwt.sign(payload, secret, { expiresIn });

@@ -3,38 +3,42 @@ const ApiError = require("../utils/ApiError");
 
 const { User } = require("../models");
 
-const getUserByEmail = async(email)=>{
-  return User.findOne({email});
-}
+const getUserByEmail = async (email) => {
+  return User.findOne({ email });
+};
 
-const getUserByEamilAndPassword = async(email) =>{
-  return User.findOne({email}).select("+password");
-}
+const getUserById = async (id) => {
+  return User.findById(id);
+};
+
+const getUserByEamilAndPassword = async (email) => {
+  return User.findOne({ email }).select("+password");
+};
 
 /**
  * - Create a new user
  */
 const createUser = async (body) => {
+  const existingUser = await getUserByEmail(body.email);
+  if (existingUser) {
+    throw new ApiError(
+      httpStatus.CONFLICT,
+      "User with this email already exists",
+    );
+  }
+  const user = await User.create(body);
 
-    const existingUser = await getUserByEmail(body.email);
-    if (existingUser) {
-      throw new ApiError(
-        httpStatus.CONFLICT,
-        "User with this email already exists",
-      );
-    }
-    const user = await User.create(body);
-
-    return user;
+  return user;
 };
 
-const getUser = async() =>{
+const getUser = async () => {
   return User.find();
-}
+};
 
 module.exports = {
   createUser,
   getUser,
   getUserByEamilAndPassword,
-  getUserByEmail
+  getUserByEmail,
+  getUserById,
 };
