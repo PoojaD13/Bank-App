@@ -1,12 +1,13 @@
 const httpStatus = require("http-status").default;
 const catchAsync = require("../utils/catchAsync");
 const ApiError = require("../utils/ApiError");
-const { authService, tokenService } = require("../services");
+const { authService, tokenService, emailService } = require("../services");
 
 const register = catchAsync(async (req, res) => {
   const { body } = req;
   const user = await authService.register(body);
   res.status(httpStatus.CREATED).send(user);
+  await emailService.sendRegistrationEmail(user.email, user.name);
 });
 
 const login = catchAsync(async (req, res) => {
@@ -25,7 +26,7 @@ const login = catchAsync(async (req, res) => {
     ),
   };
   res.cookie("refresh", token.refreshToken, jwtCookieOptions);
-  res.send({user:user, accessToken:token.token});
+  res.send({ user: user, accessToken: token.token });
 });
 
 module.exports = {
