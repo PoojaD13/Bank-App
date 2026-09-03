@@ -1,0 +1,44 @@
+const mongoose = require("mongoose");
+const {
+  transactionStatusValues,
+  transactionStatus,
+  transactionTypesValues,
+} = require("../constant/transaction");
+
+const transactionSchema = new mongoose.Schema(
+  {
+    transferType: {
+      type: String,
+      enum:transactionTypesValues,
+      required: true,
+    },
+    fromAccount: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Account",
+      index: true,
+    },
+    toAccount: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Account",
+      index: true,
+    },
+    status: {
+      type: String,
+      enum: transactionStatusValues,
+      required: true,
+      default: transactionStatus.pending,
+    },
+    amount: { type: Number, required: true, min: 0 },
+    idempotencyKey: {
+      type: String,
+      required: true,
+      index: true,
+      unique: true,
+    },
+  },
+  { timestamps: true },
+);
+
+const Transaction = mongoose.model("Transaction", transactionSchema);
+
+module.exports = Transaction;

@@ -10,6 +10,10 @@ const accountSchema = new mongoose.Schema(
       required: true,
     },
 
+    accountNumber: {
+      type: String,
+      unique: true,
+    },
     status: {
       type: String,
       enum: accountValues,

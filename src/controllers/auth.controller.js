@@ -6,6 +6,9 @@ const { authService, tokenService, emailService } = require("../services");
 const register = catchAsync(async (req, res) => {
   const { body } = req;
   const user = await authService.register(body);
+  if (!user) {
+    return (new ApiError(httpStatus.BAD_REQUEST, "User registration failed"));
+  }
   res.status(httpStatus.CREATED).send(user);
   await emailService.sendRegistrationEmail(user.email, user.name);
 });

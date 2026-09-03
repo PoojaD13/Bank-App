@@ -4,6 +4,7 @@ const router = express.Router();
 const authRoute = require("./auth.route");
 const userRoute = require("./user.route");
 const accountRoute = require("./account.route");
+const transactionRoute = require("./transaction.route");
 
 const defaultRoute = [
   {
@@ -17,6 +18,10 @@ const defaultRoute = [
   {
     path: "/accounts",
     route: accountRoute,
+  },
+  {
+    path: "/transactions",
+    route: transactionRoute,
   },
 ];
 
