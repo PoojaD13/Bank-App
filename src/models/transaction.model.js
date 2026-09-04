@@ -3,24 +3,37 @@ const {
   transactionStatusValues,
   transactionStatus,
   transactionTypesValues,
+  transactionTypes,
 } = require("../constant/transaction");
 
 const transactionSchema = new mongoose.Schema(
   {
     transferType: {
       type: String,
-      enum:transactionTypesValues,
+      enum: transactionTypesValues,
       required: true,
     },
     fromAccount: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Account",
       index: true,
+      required: function () {
+        return (
+          this.transferType === transactionTypes.transfer ||
+          this.transferType === transactionTypes.withdrawal
+        );
+      },
     },
     toAccount: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Account",
       index: true,
+      required: function () {
+        return (
+          this.transferType === transactionTypes.transfer ||
+          this.transferType === transactionTypes.deposit
+        );
+      },
     },
     status: {
       type: String,
@@ -32,7 +45,6 @@ const transactionSchema = new mongoose.Schema(
     idempotencyKey: {
       type: String,
       required: true,
-      index: true,
       unique: true,
     },
   },
