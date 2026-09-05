@@ -30,26 +30,20 @@ const getAccountBalance = async (id) => {
     {
       $group: {
         _id: null,
-        totalDebit: {
+        balance: {
           $sum: {
-            $cond: [{ $eq: ["$type", ledgerTypes.debit] }, "$amount", 0],
+            $cond: [
+              { $eq: ["$type", ledgerTypes.credit] },
+              "$amount",
+              { $multiply: [-1, "$amount"] },
+            ],
           },
         },
-        totalCredit: {
-          $sum: {
-            $cond: [{ $eq: ["$type", ledgerTypes.credit] }, "$amount", 0],
-          },
-        },
-      },
-    },
-    {
-      $project: {
-        _id: 0,
-        balance: { $subtract: ["$totalCredit", "$totalDebit"] },
       },
     },
   ]);
 
+  // check from here 
   if (balance.length === 0) {
     return 0;
   }

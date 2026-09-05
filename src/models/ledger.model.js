@@ -41,6 +41,8 @@ ledgerSchema.pre("findOneAndDelete", preventLedgerModification);
 ledgerSchema.pre("deleteOne", preventLedgerModification);
 ledgerSchema.pre("deleteMany", preventLedgerModification);
 
+ledgerSchema.index({ account: 1, type: 1 });
+
 const Ledger = mongoose.model("Ledger", ledgerSchema);
 
 module.exports = Ledger;
