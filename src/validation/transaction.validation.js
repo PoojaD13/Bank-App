@@ -27,7 +27,7 @@ const createTransaction = {
     }),
   //  status: Joi.string().valid(...transactionStatusValues),
     idempotencyKey: Joi.string().required(),
-    amount: Joi.number().required().min(0),
+    amount: Joi.number().required().min(1),
   }),
 };
 

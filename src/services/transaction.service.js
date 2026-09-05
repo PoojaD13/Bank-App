@@ -39,7 +39,7 @@ const createInitialTxn = async (body) => {
         {
           account: toAccountExist._id,
           amount: body.amount,
-          transaction: txn[0]._id,
+          transaction: txn._id,
           type: ledgerTypes.credit,
         },
         session,
@@ -80,6 +80,8 @@ const createTxn = async (body) => {
       throw new ApiError(httpStatus.INTERNAL_SERVER_ERROR, "Please try again");
     }
   }
+
+  // based on transaction type creates and entries in ledger
   switch (body.transferType) {
     case transactionTypes.transfer: {
       // Validating account number
@@ -98,28 +100,31 @@ const createTxn = async (body) => {
 
       body.fromAccount = fromAccountExist._id;
       body.toAccount = toAccountExist._id;
-      // get balance of the from user and check the balance is enough
-      const balance = await accountService.getAccountBalance(
-        fromAccountExist._id,
-      );
-      if (balance < body.amount) {
-        throw new ApiError(
-          httpStatus.BAD_REQUEST,
-          `Insufficient balance, your balance is ${balance} requested amount is ${body.amount}.`,
-        );
-      }
+
       // create Transaction
+      txn = await Transaction.create(body);
+
+      // entry ledger for both accounts
       const session = await mongoose.startSession();
 
       try {
         await session.withTransaction(async () => {
-          txn = await Transaction.create([body], { session });
+          // get balance of the from user and check the balance is enough
+          const balance = await accountService.getAccountBalance(
+            fromAccountExist._id,
+          );
+          if (balance < body.amount) {
+            throw new ApiError(
+              httpStatus.BAD_REQUEST,
+              `Insufficient balance, your balance is ${balance} requested amount is ${body.amount}.`,
+            );
+          }
 
           await ledgerService.createLedgerEntry(
             {
               account: fromAccountExist._id,
               amount: body.amount,
-              transaction: txn[0]._id,
+              transaction: txn._id,
               type: ledgerTypes.debit,
             },
             session,
@@ -128,13 +133,31 @@ const createTxn = async (body) => {
             {
               account: toAccountExist._id,
               amount: body.amount,
-              transaction: txn[0]._id,
+              transaction: txn._id,
               type: ledgerTypes.credit,
             },
             session,
           );
+
+          txn.status = transactionStatus.completed;
+          await txn.save({ session });
+
+          // await Transaction.updateOne(
+          //   {
+          //     _id: txn._id,
+          //   },
+          //   { $set: { status: transactionStatus.completed } },
+          //   { session },
+          // );
         });
       } catch (err) {
+        txn = await Transaction.updateOne(
+          {
+            _id: txn._id,
+          },
+          { $set: { status: transactionStatus.failed } },
+          { new: true },
+        );
         throw err;
       } finally {
         await session.endSession();
@@ -149,24 +172,36 @@ const createTxn = async (body) => {
         throw new ApiError(httpStatus.BAD_REQUEST, "Account doesnt exist");
       }
       body.toAccount = toAccountExist._id;
+
       // create Transaction
+
+      txn = await Transaction.create(body);
+
       const session = await mongoose.startSession();
 
       try {
         await session.withTransaction(async () => {
-          txn = await Transaction.create([body], { session });
-
           await ledgerService.createLedgerEntry(
             {
               account: toAccountExist._id,
               amount: body.amount,
-              transaction: txn[0]._id,
+              transaction: txn._id,
               type: ledgerTypes.credit,
             },
             session,
           );
+
+          txn.status = transactionStatus.completed;
+          await txn.save({ session });
         });
       } catch (err) {
+        txn = await Transaction.updateOne(
+          {
+            _id: txn._id,
+          },
+          { $set: { status: transactionStatus.failed } },
+          { new: true },
+        );
         throw err;
       } finally {
         await session.endSession();
@@ -183,34 +218,46 @@ const createTxn = async (body) => {
       }
       body.fromAccount = fromAccountExist._id;
 
-      // check for the balance
-      const balance = await accountService.getAccountBalance(
-        fromAccountExist._id,
-      );
-      if (balance < body.amount) {
-        throw new ApiError(
-          httpStatus.BAD_REQUEST,
-          `Insufficient balance, your balance is ${balance} requested amount is ${body.amount}.`,
-        );
-      }
       // create Transaction
+      txn = await Transaction.create(body);
+
+      // entry in the ledger
       const session = await mongoose.startSession();
 
       try {
         await session.withTransaction(async () => {
-          txn = await Transaction.create([body], { session });
+          // check for the balance
+          const balance = await accountService.getAccountBalance(
+            fromAccountExist._id,
+          );
+          if (balance < body.amount) {
+            throw new ApiError(
+              httpStatus.BAD_REQUEST,
+              `Insufficient balance, your balance is ${balance} requested amount is ${body.amount}.`,
+            );
+          }
 
           await ledgerService.createLedgerEntry(
             {
               account: fromAccountExist._id,
               amount: body.amount,
-              transaction: txn[0]._id,
+              transaction: txn._id,
               type: ledgerTypes.debit,
             },
             session,
           );
+
+          txn.status = transactionStatus.completed;
+          await txn.save({ session });
         });
       } catch (err) {
+        txn = await Transaction.updateOne(
+          {
+            _id: txn._id,
+          },
+          { $set: { status: transactionStatus.completed } },
+          { new: true },
+        );
         throw err;
       } finally {
         await session.endSession();
@@ -231,3 +278,5 @@ module.exports = {
   getTransaction,
   createInitialTxn,
 };
+
+// have to resolve the the logineed person id is same and also the tnx status inconsistency is their test it 
