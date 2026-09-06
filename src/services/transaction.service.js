@@ -20,38 +20,7 @@ const getTransaction = async (key) => {
   return data;
 };
 
-const createInitialTxn = async (body) => {
-  let txn;
-  const toAccountExist = await accountService.getAccountDetails(
-    body.toAccountNo,
-  );
 
-  if (!toAccountExist) {
-    return new ApiError(httpStatus.BAD_REQUEST, "Account doesnt exist");
-  }
-  const session = await mongoose.startSession();
-
-  try {
-    await session.withTransaction(async () => {
-      txn = await Transaction.create([body], { session });
-
-      await ledgerService.createLedgerEntry(
-        {
-          account: toAccountExist._id,
-          amount: body.amount,
-          transaction: txn._id,
-          type: ledgerTypes.credit,
-        },
-        session,
-      );
-    });
-  } catch (err) {
-    throw err;
-  } finally {
-    await session.endSession();
-  }
-  return txn;
-};
 
 const createTxn = async (body) => {
   let txn;
@@ -276,7 +245,6 @@ const createTxn = async (body) => {
 module.exports = {
   createTxn,
   getTransaction,
-  createInitialTxn,
 };
 
 // have to resolve the the logineed person id is same and also the tnx status inconsistency is their test it 

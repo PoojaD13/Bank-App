@@ -13,12 +13,5 @@ router
     validate(transactionValidation.createTransaction),
     transactionController.createTransaction,
   );
-router
-  .route("/initial-transaction")
-  .post(
-    auth,
-    //validate(transactionValidation.createTransaction),
-    transactionController.initialTransaction,
-  );
 
 module.exports = router;
