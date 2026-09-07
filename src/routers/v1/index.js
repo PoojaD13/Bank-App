@@ -5,6 +5,7 @@ const authRoute = require("./auth.route");
 const userRoute = require("./user.route");
 const accountRoute = require("./account.route");
 const transactionRoute = require("./transaction.route");
+const roleRoute = require("./role.route");
 
 const defaultRoute = [
   {
@@ -22,6 +23,10 @@ const defaultRoute = [
   {
     path: "/transactions",
     route: transactionRoute,
+  },
+  {
+    path: "/roles",
+    route: roleRoute,
   },
 ];
 

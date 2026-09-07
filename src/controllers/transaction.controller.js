@@ -13,5 +13,4 @@ const createTransaction = catchAsync(async (req, res) => {
 
 module.exports = {
   createTransaction,
-  initialTransaction,
 };
