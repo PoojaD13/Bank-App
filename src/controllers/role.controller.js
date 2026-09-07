@@ -7,6 +7,10 @@ const { roleService } = require("../services");
 
 const createRole = catchAsync(async (req, res) => {
   const { body } = req;
+  body.createdBy = req.user.id;
+  if (!body.createdBy) {
+    throw new ApiError(httpStatus.BAD_REQUEST, "User not found");
+  }
   const result = await roleService.createRole(body);
   res.send(result);
 });

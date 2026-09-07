@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const {modulePermissions }= require("../constant/permission");
+const { modulePermissions } = require("../constant/permission");
 
 const roleSchema = mongoose.Schema(
   {
@@ -27,6 +27,11 @@ const roleSchema = mongoose.Schema(
         },
         message: "invalid module or permission action",
       },
+    },
+    createdBy: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Employee",
+      required: true,
     },
   },
   { timestamps: true },
