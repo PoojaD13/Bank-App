@@ -1,4 +1,4 @@
-const modules = {
+const modulesName = {
   account: "ACCOUNT",
   transaction: "TRANSACTION",
   loan: "LOAN",
@@ -6,7 +6,7 @@ const modules = {
   customer: "CUSTOMER",
 };
 
-const moduleValues = Object.values(modules);
+const moduleValues = Object.values(modulesName);
 
 const modulePermissions = {
   ACCOUNT: ["READ", "CREATE", "UPDATE", "FREEZE", "UNFREEZE", "CLOSE"],
@@ -27,7 +27,7 @@ const modulePermissions = {
 };
 
 module.exports = {
-  modules,
+  modulesName,
   moduleValues,
   modulePermissions,
 };
