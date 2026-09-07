@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
+const { userType, userTypeValues } = require("../constant/user-type");
 
 const userSchema = new mongoose.Schema(
   {
@@ -22,6 +23,16 @@ const userSchema = new mongoose.Schema(
     name: {
       type: String,
       required: true,
+    },
+    userType: {
+      type: String,
+      enum: userTypeValues,
+      default: userType.customer,
+      required: true,
+    },
+    roleId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Role",
     },
   },
   {
