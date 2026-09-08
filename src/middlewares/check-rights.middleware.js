@@ -6,10 +6,8 @@ const checkRights = (requestedModule, requestedAction) => (req, res, next) => {
     throw new ApiError(httpStatus.UNAUTHORIZED, "Please authenticate");
   }
   const permissions = req.user?.roleId?.permissions;
-  console.log(permissions);
 
   const actions = permissions?.get(requestedModule) || [];
-  console.log(actions);
 
   if (!actions || !actions.includes(requestedAction)) {
     throw new ApiError(

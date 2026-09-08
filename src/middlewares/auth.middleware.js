@@ -10,10 +10,9 @@ const auth = async (req, res, next) => {
   }
   try {
     const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
-
     const user = await userService.getUserById(decoded.userId);
     if (!user) {
-      throw new ApiError(httpStatus.NOT_FOUND, "User not found");
+      return next(new ApiError(httpStatus.NOT_FOUND, "User not found"));
     }
     req.user = user;
     next();

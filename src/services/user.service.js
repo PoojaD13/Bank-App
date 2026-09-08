@@ -8,7 +8,7 @@ const getUserByEmail = async (email) => {
 };
 
 const getUserById = async (id) => {
-  return User.findById(id).populate("roleId");
+  return User.findOne({ _id: id, isActive: true }).populate("roleId");
 };
 
 const getUserByEamilAndPassword = async (email) => {
@@ -32,7 +32,19 @@ const createUser = async (body) => {
 };
 
 const getUser = async () => {
-  return User.find();
+  return User.find({ isActive: true });
+};
+
+const deleteUser = async (id) => {
+  const user = await getUserById(id);
+  if (!user) {
+    throw new ApiError(httpStatus.NOT_FOUND, "User not found/ doesnt exist");
+  }
+  return User.findByIdAndUpdate(
+    { _id: id },
+    { isActive: false },
+    { new: true },
+  );
 };
 
 module.exports = {
@@ -41,4 +53,5 @@ module.exports = {
   getUserByEamilAndPassword,
   getUserByEmail,
   getUserById,
+  deleteUser,
 };

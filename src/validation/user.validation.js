@@ -17,6 +17,22 @@ const createUser = {
   }),
 };
 
+const getUser = {
+  query: Joi.object().keys({
+    sortBy: Joi.string(),
+    limit: Joi.number().integer(),
+    page: Joi.number().integer(),
+  }),
+};
+
+const deleteUser = {
+  params: Joi.object().keys({
+    id: Joi.string().required(),
+  }),
+};
+
 module.exports = {
   createUser,
+  getUser,
+  deleteUser,
 };

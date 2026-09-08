@@ -4,12 +4,13 @@ const modulesName = {
   loan: "LOAN",
   role: "ROLE",
   customer: "CUSTOMER",
+  employee: "EMPLOYEE",
 };
 
 const moduleValues = Object.values(modulesName);
 
 const modulePermissions = {
-  ACCOUNT: ["READ", "CREATE", "UPDATE", "FREEZE", "UNFREEZE", "CLOSE"],
+  ACCOUNT: ["READ", "CREATE", "UPDATE", "FREEZE", "UNFREEZE", "CLOSE"], // this represent the bank account
   TRANSACTION: [
     "READ",
     "DEPOSIT",
@@ -18,6 +19,7 @@ const modulePermissions = {
     "APPROVE_WITHDRAWAL",
     "REJECT_WITHDRAWAL",
   ],
+  EMPLOYEE: ["CREATE", "READ", "UPDATE", "ACTIVATE", "DEACTIVATE"],
 
   CUSTOMER: ["READ", "CREATE", "UPDATE"],
 
