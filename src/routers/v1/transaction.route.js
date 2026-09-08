@@ -12,7 +12,7 @@ router
   .route("/")
   .post(
     auth,
-    checkRights(modulesName.transaction, "CREATE"),
+    checkRights(modulesName.transaction, "DEPOSIT"),
     validate(transactionValidation.createTransaction),
     transactionController.createTransaction,
   );

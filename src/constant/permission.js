@@ -2,7 +2,7 @@ const modulesName = {
   account: "ACCOUNT",
   transaction: "TRANSACTION",
   loan: "LOAN",
-  employee: "EMPLOYEE",
+  role: "ROLE",
   customer: "CUSTOMER",
 };
 
@@ -21,7 +21,7 @@ const modulePermissions = {
 
   CUSTOMER: ["READ", "CREATE", "UPDATE"],
 
-  EMPLOYEE: ["READ", "CREATE", "UPDATE", "ACTIVATE", "DEACTIVATE"],
+  ROLE: ["READ", "CREATE", "UPDATE", "ACTIVATE", "DEACTIVATE"],
 
   LOAN: ["READ", "CREATE", "UPDATE", "APPROVE", "REJECT"],
 };

@@ -3,7 +3,7 @@ const userType = {
   employee: "EMPLOYEE",
 };
 
-userTypeValues = Object.values(userType);
+const userTypeValues = Object.values(userType);
 
 module.exports = {
   userType,

@@ -6,7 +6,9 @@ const createUser = {
     email: Joi.string().email().required(),
     password: Joi.string().min(8).required(),
     name: Joi.string().required(),
-    userType: Joi.string().required().values(userTypeValues),
+    userType: Joi.string()
+      .required()
+      .valid(...userTypeValues),
     roleId: Joi.string().when("userType", {
       is: userType.employee,
       then: Joi.required(),
