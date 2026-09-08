@@ -28,6 +28,16 @@ const createRole = {
   }),
 };
 
+const updateRole = {
+  params: Joi.object().keys({
+    id: Joi.string().required(),
+  }),
+  body: Joi.object().keys({
+    permissions: Joi.object(moduleSchemaRule).min(1).required(),
+  }),
+};
+
 module.exports = {
   createRole,
+  updateRole,
 };

@@ -5,18 +5,13 @@ const checkRights = (requestedModule, requestedAction) => (req, res, next) => {
   if (!req.user) {
     throw new ApiError(httpStatus.UNAUTHORIZED, "Please authenticate");
   }
-  const permissions = req.user?.role?.permissions ;
+  const permissions = req.user?.roleId?.permissions;
+  console.log(permissions);
 
-  if (!permissions) {
-    throw new ApiError(
-      httpStatus.FORBIDDEN,
-      "You don't have permission to perform this action",
-    );
-  }
+  const actions = permissions?.get(requestedModule) || [];
+  console.log(actions);
 
-  const actions = permissions.get(requestedModule) || [];
-
-  if (!actions.includes(requestedAction)) {
+  if (!actions || !actions.includes(requestedAction)) {
     throw new ApiError(
       httpStatus.FORBIDDEN,
       "You don't have permission to perform this action",
@@ -25,6 +20,5 @@ const checkRights = (requestedModule, requestedAction) => (req, res, next) => {
 
   next();
 };
-
 
 module.exports = checkRights;

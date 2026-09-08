@@ -8,7 +8,7 @@ const getUserByEmail = async (email) => {
 };
 
 const getUserById = async (id) => {
-  return User.findById(id);
+  return User.findById(id).populate("roleId");
 };
 
 const getUserByEamilAndPassword = async (email) => {

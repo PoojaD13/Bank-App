@@ -12,9 +12,17 @@ const createRole = catchAsync(async (req, res) => {
     throw new ApiError(httpStatus.BAD_REQUEST, "User not found");
   }
   const result = await roleService.createRole(body);
-  res.send(result);
+  res.status(CREATED).send(result);
+});
+
+const updateRole = catchAsync(async (req, res) => {
+  const id = req.params.id;
+  const { body } = req;
+  const role = await roleService.updateRole(id, body);
+  res.send(role);
 });
 
 module.exports = {
   createRole,
+  updateRole,
 };
