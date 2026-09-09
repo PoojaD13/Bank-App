@@ -35,6 +35,12 @@ const getUser = async () => {
   return User.find({ isActive: true });
 };
 
+const getAllUser = async (filter, options) => {
+  filter.isActive = true;
+  return User.paginate(filter, options);
+  // return User.find({ isActive: true });
+};
+
 const deleteUser = async (id) => {
   const user = await getUserById(id);
   if (!user) {
@@ -54,4 +60,5 @@ module.exports = {
   getUserByEmail,
   getUserById,
   deleteUser,
+  getAllUser,
 };

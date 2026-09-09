@@ -1,3 +1,6 @@
+const httpStatus = require("http-status").default;
+const ApiError = require("../utils/ApiError");
+
 const { Account, Ledger } = require("../models");
 const { ledgerTypes } = require("../constant/ledger-types");
 const { accountStatus } = require("../constant/account-status");
@@ -15,11 +18,23 @@ const createAccount = async (id, body) => {
 };
 
 const getAccountById = async (id) => {
-  return Account.findById(id);
+  return Account.findOne({ _id: id, status: accountStatus.active });
 };
 
 const getAccountDetails = async (accountNumber) => {
-  return Account.findOne({ accountNumber, status: accountStatus.active });
+  const acc = await Account.findOne({
+    accountNumber,
+    status: accountStatus.active,
+  });
+  if (!acc) {
+    throw new ApiError(httpStatus.NOT_FOUND, "Account not found");
+  }
+  return acc;
+};
+
+const getAccounts = async (filter, options) => {
+  filter.status = accountStatus.active;
+  return Account.paginate(filter, options);
 };
 
 const getAccountBalance = async (id) => {
@@ -43,7 +58,7 @@ const getAccountBalance = async (id) => {
     },
   ]);
 
-  // check from here 
+  // check from here
   if (balance.length === 0) {
     return 0;
   }
@@ -67,4 +82,5 @@ module.exports = {
   getAccountBalance,
   getAccountDetails,
   generateAccountNumber,
+  getAccounts
 };

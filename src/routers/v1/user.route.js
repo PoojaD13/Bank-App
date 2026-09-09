@@ -32,4 +32,12 @@ router
     userController.deleteUser,
   );
 
+  router
+  .route("/management/all")
+  .delete(
+    auth,
+    checkRights(modulesName.employee, ["READ"]),
+    validate(userValidation.getAllUser),
+    userController.getAllUser,
+  );
 module.exports = router;

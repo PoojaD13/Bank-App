@@ -25,6 +25,16 @@ const getUser = {
   }),
 };
 
+const getAllUser = {
+  query: Joi.object().keys({
+    email: Joi.string().email(),
+    userType: Joi.string().valid(...userTypeValues),
+    sortBy: Joi.string(),
+    limit: Joi.number().integer(),
+    page: Joi.number().integer(),
+  }),
+};
+
 const deleteUser = {
   params: Joi.object().keys({
     id: Joi.string().required(),
@@ -35,4 +45,5 @@ module.exports = {
   createUser,
   getUser,
   deleteUser,
+  getAllUser,
 };

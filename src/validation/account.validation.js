@@ -9,6 +9,22 @@ const createAccount = {
   }),
 };
 
+const getAccountByAccountNumber = {
+  params: Joi.object().keys({
+    accountNumber: Joi.string().required(),
+  }),
+};
+
+const getAccounts = {
+  query: Joi.object().keys({
+    sortBy: Joi.string(),
+    limit: Joi.number().integer(),
+    page: Joi.number().integer(),
+  }),
+};
+
 module.exports = {
   createAccount,
+  getAccountByAccountNumber,
+  getAccounts,
 };
