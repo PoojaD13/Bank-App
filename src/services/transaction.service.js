@@ -20,8 +20,6 @@ const getTransaction = async (key) => {
   return data;
 };
 
-
-
 const createTxn = async (body) => {
   let txn;
 
@@ -242,9 +240,15 @@ const createTxn = async (body) => {
   return txn;
 };
 
+const getAllTransaction = async (filter, options) => {
+  const data = await Transaction.paginate(filter, options);
+  return data;
+};
+
 module.exports = {
   createTxn,
   getTransaction,
+  getAllTransaction,
 };
 
-// have to resolve the the logineed person id is same and also the tnx status inconsistency is their test it 
+// have to resolve the the logineed person id is same and also the tnx status inconsistency is their test it

@@ -29,9 +29,22 @@ const getAllUser = {
   query: Joi.object().keys({
     email: Joi.string().email(),
     userType: Joi.string().valid(...userTypeValues),
+    roleId: Joi.string(),
     sortBy: Joi.string(),
     limit: Joi.number().integer(),
     page: Joi.number().integer(),
+  }),
+};
+
+const updateUser = {
+  params: Joi.object().keys({
+    id: Joi.string().required(),
+  }),
+  body: Joi.object().keys({
+    email: Joi.string().email(),
+    password: Joi.string().min(8),
+    name: Joi.string(),
+    roleId: Joi.string(),
   }),
 };
 
@@ -45,5 +58,6 @@ module.exports = {
   createUser,
   getUser,
   deleteUser,
+  updateUser,
   getAllUser,
 };

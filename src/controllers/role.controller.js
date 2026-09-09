@@ -3,7 +3,7 @@ const pick = require("../utils/pick");
 const ApiError = require("../utils/ApiError");
 const httpStatus = require("http-status").default;
 
-const { roleService } = require("../services");
+const { roleService, accountService } = require("../services");
 
 const createRole = catchAsync(async (req, res) => {
   const { body } = req;
@@ -15,6 +15,20 @@ const createRole = catchAsync(async (req, res) => {
   res.status(CREATED).send(result);
 });
 
+const getAllRole = async (req, res) => {
+  const filter = pick(req.query, ["name"]);
+  const options = pick(req.query, ["sortBy", "page", "limit"]);
+
+  const result = await roleService.getAllRole(filter, options);
+  res.send(result);
+};
+
+const getById = catchAsync(async (req, res) => {
+  const id = req.params.id;
+  const role = await roleService.getById(id);
+  res.send(role);
+});
+
 const updateRole = catchAsync(async (req, res) => {
   const id = req.params.id;
   const { body } = req;
@@ -22,7 +36,16 @@ const updateRole = catchAsync(async (req, res) => {
   res.send(role);
 });
 
+const deleteRole = catchAsync(async(req, res) =>{
+  const id = req.params.id;
+  const role = await roleService.deleteRole(id);
+  res.send(role);
+})
+
 module.exports = {
   createRole,
+  getAllRole,
   updateRole,
+  getById,
+  deleteRole
 };

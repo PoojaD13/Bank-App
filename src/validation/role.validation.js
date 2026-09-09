@@ -28,6 +28,21 @@ const createRole = {
   }),
 };
 
+const getAllRole = {
+  query: Joi.object().keys({
+    name: Joi.string(),
+    sortBy: Joi.string(),
+    page: Joi.number().integer(),
+    limit: Joi.number().integer(),
+  }),
+};
+
+const getById = {
+  params: Joi.object().keys({
+    id: Joi.string().required(),
+  }),
+};
+
 const updateRole = {
   params: Joi.object().keys({
     id: Joi.string().required(),
@@ -36,8 +51,16 @@ const updateRole = {
     permissions: Joi.object(moduleSchemaRule).min(1).required(),
   }),
 };
+const deleteRole = {
+  params: Joi.object().keys({
+    id: Joi.string().required(),
+  }),
+};
 
 module.exports = {
   createRole,
   updateRole,
+  getAllRole,
+  getById,
+  deleteRole,
 };

@@ -15,10 +15,33 @@ router
     checkRights(modulesName.role, "CREATE"),
     validate(roleValidation.createRole),
     roleController.createRole,
+  )
+  .get(
+    auth,
+    checkRights(modulesName.role, ["READ"]),
+    validate(roleValidation.getAllRole),
+    roleController.getAllRole,
   );
 
 router
   .route("/:id")
-  .patch(auth, validate(roleValidation.updateRole), roleController.updateRole);
+  .get(
+    auth,
+    checkRights(modulesName.role, ["READ"]),
+    validate(roleValidation.getById),
+    roleController.getById,
+  )
+  .patch(
+    auth,
+    checkRights(modulesName.role, ["UPDATE"]),
+    validate(roleValidation.updateRole),
+    roleController.updateRole,
+  )
+  .delete(
+    auth,
+    checkRights(modulesName.role, ["DELETE"]),
+    validate(roleValidation.deleteRole),
+    roleController.deleteRole,
+  );
 
 module.exports = router;

@@ -23,7 +23,7 @@ const modulePermissions = {
 
   CUSTOMER: ["READ", "CREATE", "UPDATE"],
 
-  ROLE: ["READ", "CREATE", "UPDATE", "ACTIVATE", "DEACTIVATE"],
+  ROLE: ["READ", "CREATE", "UPDATE", "DELETE"],
 
   LOAN: ["READ", "CREATE", "UPDATE", "APPROVE", "REJECT"],
 };

@@ -25,6 +25,12 @@ router
 
 router
   .route("/management/:id")
+  .patch(
+    auth,
+    checkRights(modulesName.employee, ["UPDATE"]),
+    validate(userValidation.updateUser),
+    userController.updateUser,  
+  )
   .delete(
     auth,
     checkRights(modulesName.employee, ["DELETE"]),
@@ -32,9 +38,9 @@ router
     userController.deleteUser,
   );
 
-  router
+router
   .route("/management/all")
-  .delete(
+  .get(
     auth,
     checkRights(modulesName.employee, ["READ"]),
     validate(userValidation.getAllUser),

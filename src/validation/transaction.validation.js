@@ -7,12 +7,11 @@ const {
 
 const createTransaction = {
   body: Joi.object().keys({
-    transferType: Joi.string().valid(...transactionTypesValues).required(),
+    transferType: Joi.string()
+      .valid(...transactionTypesValues)
+      .required(),
     fromAccountNo: Joi.string().when("transferType", {
-      is: Joi.valid(
-        transactionTypes.transfer,
-        transactionTypes.withdrawal,
-      ),
+      is: Joi.valid(transactionTypes.transfer, transactionTypes.withdrawal),
       then: Joi.required(),
       otherwise: Joi.forbidden(),
     }),
@@ -25,12 +24,22 @@ const createTransaction = {
       then: Joi.required(),
       otherwise: Joi.forbidden(),
     }),
-  //  status: Joi.string().valid(...transactionStatusValues),
+    //  status: Joi.string().valid(...transactionStatusValues),
     idempotencyKey: Joi.string().required(),
     amount: Joi.number().required().min(1),
   }),
 };
 
+const getAllTransaction = {
+  query: Joi.object().keys({
+    transferType: Joi.string(),
+    sortBy: Joi.string(),
+    limit: Joi.number().integer(),
+    page: Joi.number().integer(),
+  }),
+};
+
 module.exports = {
   createTransaction,
+  getAllTransaction,
 };

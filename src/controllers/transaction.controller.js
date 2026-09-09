@@ -1,9 +1,8 @@
 const httpStatus = require("http-status").default;
+const pick = require("../utils/pick");
 const catchAsync = require("../utils/catchAsync");
 const ApiError = require("../utils/ApiError");
 const { transactionService } = require("../services");
-
-
 
 const createTransaction = catchAsync(async (req, res) => {
   const { body } = req;
@@ -11,6 +10,14 @@ const createTransaction = catchAsync(async (req, res) => {
   res.send(result);
 });
 
+const getAllTransaction = catchAsync(async (req, res) => {
+  const filter = pick(req.query,["transferType"]);
+  const options = pick(req.query,["sortBy", "page", "limit"]);
+  const data = await transactionService.getAllTransaction(filter, options);
+  res.send(data);
+});
+
 module.exports = {
   createTransaction,
+  getAllTransaction,
 };

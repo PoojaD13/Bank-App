@@ -1,7 +1,9 @@
 const httpStatus = require("http-status").default;
 const ApiError = require("../utils/ApiError");
 
+const roleService = require("./role.service");
 const { User } = require("../models");
+const { userType } = require("../constant/user-type");
 
 const getUserByEmail = async (email) => {
   return User.findOne({ email });
@@ -26,6 +28,14 @@ const createUser = async (body) => {
       "User with this email already exists",
     );
   }
+
+  if (body.roleId) {
+    const role = await roleService.getById(body.roleId);
+    if (!role) {
+      throw new ApiError(httpStatus.NOT_FOUND, "Role Not Found");
+    }
+  }
+
   const user = await User.create(body);
 
   return user;
@@ -41,6 +51,13 @@ const getAllUser = async (filter, options) => {
   // return User.find({ isActive: true });
 };
 
+const updateUser = async (params, body) => {
+  let user = await getUserById(params.id);
+  if (body?.roleId && user.userType !== userType.employee) {
+    throw new ApiError(httpStatus.BAD_REQUEST, "Only employee can have role");
+  }
+  return User.findByIdAndUpdate({ _id: params.id }, body, { new: true });
+};
 const deleteUser = async (id) => {
   const user = await getUserById(id);
   if (!user) {
@@ -61,4 +78,5 @@ module.exports = {
   getUserById,
   deleteUser,
   getAllUser,
+  updateUser,
 };
