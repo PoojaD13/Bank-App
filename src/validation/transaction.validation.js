@@ -32,6 +32,7 @@ const createTransaction = {
 
 const getAllTransaction = {
   query: Joi.object().keys({
+  
     transferType: Joi.string(),
     sortBy: Joi.string(),
     limit: Joi.number().integer(),
