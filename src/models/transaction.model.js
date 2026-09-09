@@ -1,4 +1,6 @@
 const mongoose = require("mongoose");
+const mongoosePaginate = require("mongoose-paginate-v2");
+
 const {
   transactionStatusValues,
   transactionStatus,
@@ -50,6 +52,8 @@ const transactionSchema = new mongoose.Schema(
   },
   { timestamps: true },
 );
+
+transactionSchema.plugin(mongoosePaginate);
 
 const Transaction = mongoose.model("Transaction", transactionSchema);
 

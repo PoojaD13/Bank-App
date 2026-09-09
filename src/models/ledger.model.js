@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 const { ledgerTypesValues } = require("../constant/ledger-types");
 const ApiError = require("../utils/ApiError");
 const httpStatus = require("http-status").default;
+const mongoosePaginate = require("mongoose-paginate-v2");
 
 const ledgerSchema = new mongoose.Schema({
   account: {
@@ -43,6 +44,7 @@ ledgerSchema.pre("deleteMany", preventLedgerModification);
 
 ledgerSchema.index({ account: 1, type: 1 });
 
+ledgerSchema.plugin(mongoosePaginate);
 const Ledger = mongoose.model("Ledger", ledgerSchema);
 
 module.exports = Ledger;

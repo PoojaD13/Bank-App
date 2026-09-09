@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const { modulePermissions } = require("../constant/permission");
+const mongoosePaginate = require("mongoose-paginate-v2");
 
 const roleSchema = mongoose.Schema(
   {
@@ -37,6 +38,7 @@ const roleSchema = mongoose.Schema(
   { timestamps: true },
 );
 
+roleSchema.plugin(mongoosePaginate);
 const Role = mongoose.model("Role", roleSchema);
 
 module.exports = Role;
