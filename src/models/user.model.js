@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
+const mongoosePaginate = require("mongoose-paginate-v2");
 const { userType, userTypeValues } = require("../constant/user-type");
 
 const userSchema = new mongoose.Schema(
@@ -65,6 +66,7 @@ userSchema.methods.comparePassword = async function (password) {
   return await bcrypt.compare(password, this.password);
 };
 
+userSchema.plugin(mongoosePaginate);
 const User = mongoose.model("User", userSchema);
 
 module.exports = User;

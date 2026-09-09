@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const mongoosePaginate = require("mongoose-paginate-v2");
 const { currencyValues, currencyTypes } = require("../constant/currency");
 const { accountValues, accountStatus } = require("../constant/account-status");
 
@@ -31,6 +32,8 @@ const accountSchema = new mongoose.Schema(
 );
 
 accountSchema.index({ userId: 1, status: 1 }, { unique: true });
+
+accountSchema.plugin(mongoosePaginate);
 
 const Account = mongoose.model("Account", accountSchema);
 
