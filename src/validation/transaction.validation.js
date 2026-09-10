@@ -31,9 +31,12 @@ const createTransaction = {
 };
 
 const getAllTransaction = {
+  params: Joi.object().keys({
+    accNo: Joi.string().required(),
+  }),
   query: Joi.object().keys({
-  
     transferType: Joi.string(),
+    //.valid(...transactionTypesValues),
     sortBy: Joi.string(),
     limit: Joi.number().integer(),
     page: Joi.number().integer(),

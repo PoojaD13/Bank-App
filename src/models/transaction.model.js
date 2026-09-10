@@ -26,9 +26,29 @@ const transactionSchema = new mongoose.Schema(
         );
       },
     },
+    fromAccountNo: {
+      type: String,
+      index: true,
+      required: function () {
+        return (
+          this.transferType === transactionTypes.transfer ||
+          this.transferType === transactionTypes.withdrawal
+        );
+      },
+    },
     toAccount: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Account",
+      index: true,
+      required: function () {
+        return (
+          this.transferType === transactionTypes.transfer ||
+          this.transferType === transactionTypes.deposit
+        );
+      },
+    },
+    toAccountNo: {
+      type: String,
       index: true,
       required: function () {
         return (

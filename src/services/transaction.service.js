@@ -240,7 +240,9 @@ const createTxn = async (body) => {
   return txn;
 };
 
-const getAllTransaction = async (filter, options) => {
+const getAllTransaction = async (accNo, filter, options) => {
+  filter.$or = [{ fromAccountNo: accNo }, { toAccountNo: accNo }];
+
   const data = await Transaction.paginate(filter, options);
   return data;
 };

@@ -11,7 +11,6 @@ const transactionTypes = {
   transfer: "TRANSFER",
   deposit: "DEPOSIT",
   withdrawal: "WITHDRAWAL",
-  initial_balance: "INITIAL_BALANCE",
 };
 
 const transactionTypesValues = Object.values(transactionTypes);

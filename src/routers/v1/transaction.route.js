@@ -15,12 +15,15 @@ router
     checkRights(modulesName.transaction, "DEPOSIT"),
     validate(transactionValidation.createTransaction),
     transactionController.createTransaction,
-  ).get(
+  );
+
+router
+  .route("/:accNo")
+  .get(
     auth,
     checkRights(modulesName.transaction, "READ"),
     validate(transactionValidation.getAllTransaction),
-    transactionController.getAllTransaction,  
+    transactionController.getAllTransaction,
   );
-
 
 module.exports = router;

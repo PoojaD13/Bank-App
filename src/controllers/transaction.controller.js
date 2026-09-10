@@ -11,9 +11,10 @@ const createTransaction = catchAsync(async (req, res) => {
 });
 
 const getAllTransaction = catchAsync(async (req, res) => {
-  const filter = pick(req.query,["transferType"]);
-  const options = pick(req.query,["sortBy", "page", "limit"]);
-  const data = await transactionService.getAllTransaction(filter, options);
+  const accNo = req.params.accNo;
+  const filter = pick(req.query, ["transferType"]);
+  const options = pick(req.query, ["sortBy", "page", "limit"]);
+  const data = await transactionService.getAllTransaction(accNo,filter, options);
   res.send(data);
 });
 
