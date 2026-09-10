@@ -29,7 +29,7 @@ router
     auth,
     checkRights(modulesName.employee, ["UPDATE"]),
     validate(userValidation.updateUser),
-    userController.updateUser,  
+    userController.updateUser,
   )
   .delete(
     auth,
@@ -46,4 +46,6 @@ router
     validate(userValidation.getAllUser),
     userController.getAllUser,
   );
+
+router.route("/profile").get(auth, userController.getLogginedUser);
 module.exports = router;

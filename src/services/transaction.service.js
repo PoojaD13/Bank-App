@@ -108,14 +108,6 @@ const createTxn = async (body) => {
 
           txn.status = transactionStatus.completed;
           await txn.save({ session });
-
-          // await Transaction.updateOne(
-          //   {
-          //     _id: txn._id,
-          //   },
-          //   { $set: { status: transactionStatus.completed } },
-          //   { session },
-          // );
         });
       } catch (err) {
         txn = await Transaction.updateOne(

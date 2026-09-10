@@ -9,4 +9,6 @@ const router = express.Router();
 router.post("/register", validate(authValidation.register), authController.register);
 router.post("/login", validate(authValidation.login), authController.login);
 
+// refresh token and logout enpoint
+
 module.exports = router;

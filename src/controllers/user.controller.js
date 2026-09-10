@@ -24,8 +24,8 @@ const getAllUser = catchAsync(async (req, res) => {
 
 const updateUser = catchAsync(async (req, res) => {
   const { params, body } = req;
-  
-  const user = await  userService.updateUser(params, body);
+
+  const user = await userService.updateUser(params, body);
   res.send(user);
 });
 
@@ -34,10 +34,19 @@ const deleteUser = catchAsync(async (req, res) => {
   res.send(result);
 });
 
+// Loggined user
+
+const getLogginedUser = catchAsync(async (req, res) => {
+  const id = req.user.id;
+  const user = await userService.getUserById(id);
+  res.send(user);
+});
+
 module.exports = {
   createUser,
   getUser,
   deleteUser,
   getAllUser,
   updateUser,
+  getLogginedUser,
 };
