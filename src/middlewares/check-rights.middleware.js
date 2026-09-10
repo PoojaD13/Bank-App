@@ -9,7 +9,11 @@ const checkRights = (requestedModule, requestedAction) => (req, res, next) => {
 
   const actions = permissions?.get(requestedModule) || [];
 
-  if (!actions || !actions.includes(requestedAction)) {
+  const authoriative = requestedAction.some((action) =>
+    actions.includes(action),
+  );
+
+  if (!actions || !authoriative) {
     throw new ApiError(
       httpStatus.FORBIDDEN,
       "You don't have permission to perform this action",
