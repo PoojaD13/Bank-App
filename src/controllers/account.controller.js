@@ -24,8 +24,23 @@ const getAccountByAccountNumber = catchAsync(async (req, res) => {
   res.send(account);
 });
 
+const getAccountOfLogginedUser = catchAsync(async (req, res) => {
+  const userId = req.user.id;
+  const acc = await accountService.getAccountOfLogginedUserById(userId);
+  res.send(acc);
+});
+
+const getBalanceOfLogginedUserById = catchAsync(async (req, res) => {
+  const userId = req.user.id;
+  const userAccount = await accountService.getAccountOfLogginedUserById(userId);
+  const bal = await accountService.getAccountBalance(userAccount._id);
+  res.send({Balance: bal});
+});
+
 module.exports = {
   createAccount,
   getAccountByAccountNumber,
   getAccounts,
+  getAccountOfLogginedUser,
+  getBalanceOfLogginedUserById,
 };

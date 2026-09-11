@@ -25,6 +25,9 @@ router
     accountController.getAccounts,
   );
 
+router.get("/myAccount", auth, accountController.getAccountOfLogginedUser);
+router.get("/myBalance", auth, accountController.getBalanceOfLogginedUserById);
+
 router.get(
   "/:accountNumber",
   auth,

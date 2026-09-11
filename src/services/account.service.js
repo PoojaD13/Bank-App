@@ -37,6 +37,10 @@ const getAccounts = async (filter, options) => {
   return Account.paginate(filter, options);
 };
 
+const getAccountOfLogginedUserById = async (userId) => {
+  return await Account.find({ userId, status: accountStatus.active });
+};
+
 const getAccountBalance = async (id) => {
   const balance = await Ledger.aggregate([
     {
@@ -82,5 +86,6 @@ module.exports = {
   getAccountBalance,
   getAccountDetails,
   generateAccountNumber,
-  getAccounts
+  getAccounts,
+  getAccountOfLogginedUserById,
 };
