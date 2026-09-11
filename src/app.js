@@ -12,6 +12,7 @@ const httpStatus = require("http-status").default;
 const ApiError = require("./utils/ApiError");
 const cookieParser = require("cookie-parser");
 const { errorHandler, errorConverter } = require("./middlewares/error");
+const { authLimit } = require("./middlewares/rate-limit");
 
 const app = express();
 
@@ -19,6 +20,10 @@ app.use(cookieParser());
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+
+if (process.env.NODE_ENV === "production") {
+  app.use("/api/v1/auth", authLimit);
+}
 
 // route mounting
 app.use("/api/v1", router);
