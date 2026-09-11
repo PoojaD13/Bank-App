@@ -10,7 +10,7 @@ const modulesName = {
 const moduleValues = Object.values(modulesName);
 
 const modulePermissions = {
-  ACCOUNT: ["READ", "CREATE", "UPDATE", "FREEZE", "UNFREEZE", "CLOSE"], // this represent the bank account
+  ACCOUNT: ["READ", "CREATE", "UPDATE"], // this represent the bank account
   TRANSACTION: [
     "READ",
     "DEPOSIT",

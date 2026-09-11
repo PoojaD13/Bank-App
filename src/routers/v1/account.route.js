@@ -28,12 +28,19 @@ router
 router.get("/myAccount", auth, accountController.getAccountOfLogginedUser);
 router.get("/myBalance", auth, accountController.getBalanceOfLogginedUserById);
 
-router.get(
-  "/:accountNumber",
-  auth,
-  checkRights(modulesName.account, ["READ"]),
-  validate(accountValidation.getAccountByAccountNumber),
-  accountController.getAccountByAccountNumber,
-);
+router
+  .route("/:accountNumber")
+  .get(
+    auth,
+    checkRights(modulesName.account, ["READ"]),
+    validate(accountValidation.getAccountByAccountNumber),
+    accountController.getAccountByAccountNumber,
+  )
+  .patch(
+    auth,
+    checkRights(modulesName.account, ["UPDATE"]),
+    validate(accountValidation.updateAccounts),
+    accountController.updateAccount,
+  );
 
 module.exports = router;

@@ -1,6 +1,6 @@
 const accountStatus = {
   active: "ACTIVE",
-  frozen: "FROZEN",
+  close: "CLOSE",
   inactive: "INACTIVE",
 };
 

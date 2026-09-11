@@ -80,6 +80,21 @@ const generateAccountNumber = async () => {
   return accNo;
 };
 
+const updateAccount = async (params, body) => {
+  const acc = await Account.findOneAndUpdate(
+    {
+      accountNumber: params.accountNumber,
+      status: { $ne: accountStatus.close },
+    },
+    body,
+    { new: true },
+  );
+  if (!acc) {
+    throw new ApiError(httpStatus.NOT_FOUND, "Account not found");
+  }
+  return acc;
+};
+
 module.exports = {
   createAccount,
   getAccountById,
@@ -88,4 +103,5 @@ module.exports = {
   generateAccountNumber,
   getAccounts,
   getAccountOfLogginedUserById,
+  updateAccount,
 };
