@@ -6,3 +6,4 @@ module.exports.accountService = require("./account.service");
 module.exports.transactionService = require("./transaction.service");
 module.exports.ledgerService = require("./ledger.service");
 module.exports.roleService = require("./role.service");
+module.exports.bankRuleService = require("./bank-rule.service");
