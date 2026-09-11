@@ -17,7 +17,6 @@ router
     transactionController.createTransaction,
   );
 
-
 router
   .route("/transfer")
   .post(
@@ -30,7 +29,7 @@ router
   .route("/:accNo")
   .get(
     auth,
-    checkRights(modulesName.transaction, "READ"),
+    checkRights(modulesName.transaction, ["READ"]),
     validate(transactionValidation.getAllTransaction),
     transactionController.getAllTransaction,
   );

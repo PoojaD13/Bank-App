@@ -35,8 +35,12 @@ const getAllTransaction = {
     accNo: Joi.string().required(),
   }),
   query: Joi.object().keys({
-    transferType: Joi.string(),
-    //.valid(...transactionTypesValues),
+    transferType: Joi.string().valid(...transactionTypesValues),
+    startDate: Joi.date(),
+    endDate: Joi.date().when("startDate", {
+      is: Joi.exist(),
+      then: Joi.date().greater(Joi.ref("startDate")),
+    }),
     sortBy: Joi.string(),
     limit: Joi.number().integer(),
     page: Joi.number().integer(),

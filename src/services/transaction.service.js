@@ -234,6 +234,16 @@ const createTxn = async (body) => {
 
 const getAllTransaction = async (accNo, filter, options) => {
   filter.$or = [{ fromAccountNo: accNo }, { toAccountNo: accNo }];
+  if (filter.startDate) {
+    const startDate = new Date(filter?.startDate);
+    filter.createdAt = { $gte: startDate };
+    if (filter.endDate) {
+      const endDate = new Date(filter?.endDate);
+      filter.createdAt = { $gte: startDate, $lte: endDate };
+    }
+    delete filter?.endDate;
+    delete filter.startDate;
+  }
 
   const data = await Transaction.paginate(filter, options);
   return data;
