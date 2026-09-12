@@ -25,7 +25,7 @@ router
   );
 
 router
-  .route("/:ruleId")
+  .route("/:id")
   .get(
     auth,
     checkRights(modulesName.bankRuleEngine, ["READ"]),

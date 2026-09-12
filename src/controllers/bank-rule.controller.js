@@ -1,5 +1,5 @@
 const httpStatus = require("http-status").default;
-const catchAsync = require("../utils/catch-async");
+const catchAsync = require("../utils/catchAsync");
 const pick = require("../utils/pick");
 const { bankRuleService } = require("../services");
 
@@ -33,7 +33,7 @@ const getRuleById = catchAsync(async (req, res) => {
 const updateRule = catchAsync(async (req, res) => {
   const { body, params } = req;
   body.updatedBy = req.user.id;
-  const rule = await bankRuleService.updateRuleById(params, body);
+  const rule = await bankRuleService.updateRuleById(params.id, body);
   res.send(rule);
 });
 

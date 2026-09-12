@@ -39,7 +39,7 @@ const bankRuleEngineSchema = new mongoose.Schema(
     ruleName: {
       type: String,
       required: true,
-      trim: true, // Example: "High Value Loan Approval Matrix"
+      trim: true,
     },
     moduleName: {
       type: String,
@@ -62,11 +62,6 @@ const bankRuleEngineSchema = new mongoose.Schema(
     // Multi-level approval steps ordered by 'level' (Step 1 -> Step 2 -> Step 3)
     approvalSteps: [approvalStepSchema],
 
-    // Basic Audit & Meta Fields
-    isActive: {
-      type: Boolean,
-      default: true,
-    },
     description: {
       type: String,
       trim: true,
@@ -99,6 +94,6 @@ bankRuleEngineSchema.index({
 
 bankRuleEngineSchema.plugin(mongoosePaginate);
 
-const BankRuleEngine = mongoose.model("BankRuleEngine", BankRuleEngineSchema);
+const BankRuleEngine = mongoose.model("BankRuleEngine", bankRuleEngineSchema);
 
 module.exports = BankRuleEngine;

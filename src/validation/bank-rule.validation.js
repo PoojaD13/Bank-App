@@ -3,19 +3,22 @@ const { modulesName } = require("../constant/permission");
 const { approvalActionValues } = require("../constant/approval-action");
 
 // Custom helper to validate MongoDB ObjectIds
-// const objectId = (value, helpers) => {
-//   if (!value.match(/^[0-9a-fA-F]{24}$/)) {
-//     return helpers.message('"{{#label}}" must be a valid mongo id');
-//   }
-//   return value;
-// };
+const objectId = (value, helpers) => {
+  if (!value.match(/^[0-9a-fA-F]{24}$/)) {
+    return helpers.message('"{{#label}}" must be a valid mongo id');
+  }
+  return value;
+};
 
-const approvalStepSchema = Joi.object({
+const approvalStepSchema = Joi.object().keys({
   level: Joi.number().integer().min(1).required(),
-  roleId: Joi.string().required(),
-  // roleId: Joi.string().custom(objectId).required(),
+  // roleId: Joi.string().required(),
+  roleId: Joi.string().custom(objectId).required(),
   actions: Joi.array()
     .items(Joi.string().valid(...approvalActionValues))
+    .unique()
+    .min(1)
+    .required()
     .default(["PENDING"]),
 });
 
@@ -27,7 +30,12 @@ const createRule = {
       .required(),
     minAmount: Joi.number().min(0).default(0),
     maxAmount: Joi.number().min(Joi.ref("minAmount")).required(),
-    approvalSteps: Joi.array().items(approvalStepSchema).min(1).required(),
+    approvalSteps: Joi.array()
+      .items(approvalStepSchema)
+      .min(1)
+      .unique("roleId")
+      .unique("level")
+      .required(),
     description: Joi.string().allow("", null).trim(),
   }),
 };
@@ -43,13 +51,13 @@ const getRules = {
 
 const getRuleById = {
   params: Joi.object().keys({
-    ruleId: Joi.string().required(),
+    id: Joi.string().custom(objectId).required(),
   }),
 };
 
 const updateRule = {
   params: Joi.object().keys({
-    ruleId: Joi.string().required(),
+    id: Joi.string().custom(objectId).required(),
   }),
   body: Joi.object()
     .keys({
@@ -66,7 +74,7 @@ const updateRule = {
 
 const deleteRule = {
   params: Joi.object().keys({
-    ruleId: Joi.string().required(),
+    id: Joi.string().custom(objectId).required(),
   }),
 };
 
