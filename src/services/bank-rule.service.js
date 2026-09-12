@@ -49,8 +49,6 @@ const updateRuleById = async (id, body) => {
       );
     }
   }
-
-  console.log(id);
   const data = await BankRuleEngine.findOneAndUpdate(
     { _id: id, isArchive: false },
     { $set: body },
