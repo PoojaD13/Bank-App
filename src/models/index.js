@@ -4,3 +4,4 @@ module.exports.Transaction = require("./transaction.model");
 module.exports.Ledger = require("./ledger.model");
 module.exports.Role = require("./role.model");
 module.exports.BankRuleEngine = require("./bank-rule.model");
+module.exports.RequestApproval = require("./request-approval.model");
