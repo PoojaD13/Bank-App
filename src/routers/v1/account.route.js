@@ -43,4 +43,11 @@ router
     accountController.updateAccount,
   );
 
+  router.route("/close/:accountNumber").patch(
+    auth,
+    checkRights(modulesName.account, ["CLOSE"]),
+    validate(accountValidation.closeAccounts),
+    accountController.closeAccount,
+  );
+
 module.exports = router;

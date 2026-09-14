@@ -43,4 +43,12 @@ router
     transactionController.excuteTxn,
   );
 
+router
+  .route("/id/:id")
+  .get(
+    auth,
+    validate(transactionValidation.getTxn),
+    transactionController.getTransactionById,
+  );
+
 module.exports = router;

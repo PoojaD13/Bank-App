@@ -17,6 +17,7 @@ const createAccount = async (id, body) => {
   return account;
 };
 
+// acc id
 const getAccountById = async (id) => {
   return Account.findOne({ _id: id, status: accountStatus.active });
 };
@@ -95,6 +96,24 @@ const updateAccount = async (params, body) => {
   return acc;
 };
 
+const closeAccount = async (params) => {
+  const acc = await Account.findOneAndUpdate(
+    {
+      accountNumber: params.accountNumber,
+      status: { $ne: accountStatus.close },
+    },
+    { status: accountStatus.close },
+    { new: true },
+  );
+  if (!acc) {
+    throw new ApiError(
+      httpStatus.BAD_REQUEST,
+      "Account not found/already closed",
+    );
+  }
+  return acc;
+};
+
 module.exports = {
   createAccount,
   getAccountById,
@@ -104,4 +123,5 @@ module.exports = {
   getAccounts,
   getAccountOfLogginedUserById,
   updateAccount,
+  closeAccount,
 };

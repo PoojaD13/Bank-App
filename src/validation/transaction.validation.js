@@ -59,8 +59,15 @@ const processTnx = {
   }),
 };
 
+const getTxn = {
+  params: Joi.object().keys({
+    id: Joi.string().custom(objectId).required(),
+  }),
+};
+
 module.exports = {
   createTransaction,
   getAllTransaction,
   processTnx,
+  getTxn,
 };

@@ -321,12 +321,38 @@ const getAllTransaction = async (accNo, filter, options) => {
   const data = await Transaction.paginate(filter, options);
   return data;
 };
+const getTransactionById = async (id, userId) => {
+  // 1. Get the logged-in user's account details
+  const acc = await accountService.getAccountOfLogginedUserById(userId);
+  if (!acc) {
+    throw new ApiError(httpStatus.BAD_REQUEST, "Account not found");
+  }
+
+  // 2. Query by the Transaction ID AND make sure the user's account is either the sender or receiver
+  const txn = await Transaction.findOne({
+    _id: id,
+    $or: [{ fromAccount: acc._id }, { toAccount: acc._id }],
+  });
+
+  // 3. Fixed the typo from 'tnx' to 'txn'
+  console.log(txn);
+
+  if (!txn) {
+    throw new ApiError(
+      httpStatus.NOT_FOUND,
+      "Transaction not found or you do not have permission to view it.",
+    );
+  }
+
+  return txn;
+};
 
 module.exports = {
   createTxn,
   getTransaction,
   getAllTransaction,
   excuteTransaction,
+  getTransactionById,
 };
 
 // have to resolve the the logineed person id is same and also the tnx status inconsistency is their test it

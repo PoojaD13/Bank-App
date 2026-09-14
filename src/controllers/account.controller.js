@@ -44,6 +44,12 @@ const updateAccount = catchAsync(async (req, res) => {
   res.send(acc);
 });
 
+const closeAccount = catchAsync(async (req, res) => {
+  const { params } = req;
+  const acc = await accountService.closeAccount(params);
+  res.send(acc);
+});
+
 module.exports = {
   createAccount,
   getAccountByAccountNumber,
@@ -51,4 +57,5 @@ module.exports = {
   getAccountOfLogginedUser,
   getBalanceOfLogginedUserById,
   updateAccount,
+  closeAccount,
 };
