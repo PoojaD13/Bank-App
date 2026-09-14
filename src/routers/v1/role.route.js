@@ -12,7 +12,7 @@ router
   .route("/")
   .post(
     auth,
-    checkRights(modulesName.role, "CREATE"),
+    checkRights(modulesName.role, ["CREATE"]),
     validate(roleValidation.createRole),
     roleController.createRole,
   )

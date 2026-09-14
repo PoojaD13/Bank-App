@@ -2,7 +2,6 @@ const httpStatus = require("http-status").default;
 const ApiError = require("../utils/ApiError");
 const { Role, User } = require("../models");
 
-
 const createRole = async (body) => {
   const result = await Role.create(body);
   return result;

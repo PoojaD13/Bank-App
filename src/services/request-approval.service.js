@@ -134,18 +134,19 @@ const queryApprovalsWithPagination = async (filter, options) => {
   return RequestApproval.paginate(query, paginateOptions);
 };
 
-const getApprovalByRefrenceId = async(refrenceId) =>{
-  const data = await RequestApproval.findOne(refrenceId);
-  if(!data){
+const getApprovalByRefrenceId = async (refrenceId) => {
+  const data = await RequestApproval.findOne({ refrenceId: refrenceId });
+
+  if (!data) {
     throw new ApiError(httpStatus.NOT_FOUND, "Approval record not found.");
   }
   return data;
-}
+};
 
 module.exports = {
   createApproval,
   processStepAction,
   getPendingApprovalsByRole,
   queryApprovalsWithPagination,
-  getApprovalByRefrenceId
+  getApprovalByRefrenceId,
 };

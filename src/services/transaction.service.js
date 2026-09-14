@@ -2,7 +2,7 @@ const httpStatus = require("http-status").default;
 const ApiError = require("../utils/ApiError");
 const mongoose = require("mongoose");
 
-const { Transaction } = require("../models");
+const { Transaction, BankRuleEngine } = require("../models");
 const {
   transactionTypes,
   transactionStatus,
@@ -11,8 +11,70 @@ const { ledgerTypes } = require("../constant/ledger-types");
 
 const accountService = require("./account.service");
 const ledgerService = require("./ledger.service");
+const { modulesName } = require("../constant/permission");
+const requestApprovalService = require("./request-approval.service");
 const emailService = require("./email.service");
+const { approvalAction } = require("../constant/approval-action");
 
+const excuteTransaction = async (id) => {
+  let existTxn = await Transaction.findById(id);
+  if (existTxn.status !== transactionStatus.pending) {
+    throw new ApiError(
+      httpStatus.BAD_REQUEST,
+      `transaction status is ${existTxn.status}`,
+    );
+  }
+
+  const approvalDoc = await requestApprovalService.getApprovalByRefrenceId(
+    existTxn._id,
+  );
+  if (approvalDoc.status === approvalAction.pending) {
+    return `The transaction is under process ${approvalDoc.status}`;
+  }
+  if (approvalDoc.status === approvalAction.rejected) {
+    return `The transaction is Rejected ${approvalDoc.status}`;
+  }
+  // i need here to check the approval stuf
+
+  const session = await mongoose.startSession();
+
+  try {
+    await session.withTransaction(async () => {
+      // check for the balance
+      const balance = await accountService.getAccountBalance(
+        existTxn.fromAccount,
+      );
+      if (balance < existTxn.amount) {
+        throw new ApiError(
+          httpStatus.BAD_REQUEST,
+          `Insufficient balance, your balance is ${balance} requested amount is ${existTxn.amount}.`,
+        );
+      }
+
+      await ledgerService.createLedgerEntry(
+        {
+          account: existTxn.fromAccount,
+          amount: existTxn.amount,
+          transaction: existTxn._id,
+          type: ledgerTypes.debit,
+        },
+        session,
+      );
+
+      existTxn.status = transactionStatus.completed;
+      await existTxn.save({ session });
+    });
+  } catch (err) {
+    existTxn.status = transactionStatus.failed;
+    await existTxn.save({ session });
+    throw err;
+  } finally {
+    await session.endSession();
+  }
+  return existTxn;
+};
+
+// get the transaction details
 const getTransaction = async (key) => {
   const data = await Transaction.findOne({
     idempotencyKey: key,
@@ -20,6 +82,7 @@ const getTransaction = async (key) => {
   return data;
 };
 
+// create the transaction based on the transferType.
 const createTxn = async (body) => {
   let txn;
 
@@ -180,6 +243,16 @@ const createTxn = async (body) => {
       // create Transaction
       txn = await Transaction.create(body);
 
+      const approval = await requestApprovalService.createApproval({
+        moduleName: modulesName.transaction,
+        refrenceId: txn._id,
+        amount: body.amount,
+      });
+
+      if (approval) {
+        return { approval, txn };
+      }
+
       // entry in the ledger
       const session = await mongoose.startSession();
 
@@ -253,6 +326,7 @@ module.exports = {
   createTxn,
   getTransaction,
   getAllTransaction,
+  excuteTransaction,
 };
 
 // have to resolve the the logineed person id is same and also the tnx status inconsistency is their test it

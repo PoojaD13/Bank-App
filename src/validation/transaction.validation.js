@@ -5,6 +5,12 @@ const {
   transactionTypesValues,
 } = require("../constant/transaction");
 
+const objectId = (value, helpers) => {
+  if (!value.match(/^[0-9a-fA-F]{24}$/)) {
+    return helpers.message('"{{#label}}" must be a valid mongo id');
+  }
+  return value;
+};
 const createTransaction = {
   body: Joi.object().keys({
     transferType: Joi.string()
@@ -47,7 +53,14 @@ const getAllTransaction = {
   }),
 };
 
+const processTnx = {
+  params: Joi.object().keys({
+    id: Joi.string().custom(objectId).required(),
+  }),
+};
+
 module.exports = {
   createTransaction,
   getAllTransaction,
+  processTnx,
 };

@@ -12,7 +12,7 @@ const createRole = catchAsync(async (req, res) => {
     throw new ApiError(httpStatus.BAD_REQUEST, "User not found");
   }
   const result = await roleService.createRole(body);
-  res.status(CREATED).send(result);
+  res.status(httpStatus.CREATED).send(result);
 });
 
 const getAllRole = async (req, res) => {
@@ -36,16 +36,16 @@ const updateRole = catchAsync(async (req, res) => {
   res.send(role);
 });
 
-const deleteRole = catchAsync(async(req, res) =>{
+const deleteRole = catchAsync(async (req, res) => {
   const id = req.params.id;
   const role = await roleService.deleteRole(id);
   res.send(role);
-})
+});
 
 module.exports = {
   createRole,
   getAllRole,
   updateRole,
   getById,
-  deleteRole
+  deleteRole,
 };

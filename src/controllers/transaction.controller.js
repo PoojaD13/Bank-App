@@ -7,15 +7,15 @@ const { transactionService } = require("../services");
 const createTransaction = catchAsync(async (req, res) => {
   const { body } = req;
   const result = await transactionService.createTxn(body);
-  res.send(result);
+  res.status(httpStatus.CREATED).send(result);
 });
 
 const getAllTransaction = catchAsync(async (req, res) => {
   const accNo = req.params.accNo;
-  console.log(req.query);
+
   const filter = pick(req.query, ["transferType", "startDate", "endDate"]);
   const options = pick(req.query, ["sortBy", "page", "limit"]);
-  console.log(filter);
+
   const data = await transactionService.getAllTransaction(
     accNo,
     filter,
@@ -24,7 +24,13 @@ const getAllTransaction = catchAsync(async (req, res) => {
   res.send(data);
 });
 
+const excuteTxn = catchAsync(async (req, res) => {
+  const id = req.params.id;
+  const result = await transactionService.excuteTransaction(id);
+  res.send(result);
+});
 module.exports = {
   createTransaction,
   getAllTransaction,
+  excuteTxn,
 };

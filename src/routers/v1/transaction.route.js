@@ -34,4 +34,13 @@ router
     transactionController.getAllTransaction,
   );
 
+router
+  .route("/:id/process-transaction")
+  .patch(
+    auth,
+    checkRights(modulesName.transaction, ["DEPOSIT", "WITHDRAWAL"]),
+    validate(transactionValidation.processTnx),
+    transactionController.excuteTxn,
+  );
+
 module.exports = router;
