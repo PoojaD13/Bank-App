@@ -26,7 +26,6 @@ const modulePermissions = {
   CUSTOMER: ["READ", "CREATE", "UPDATE"],
 
   ROLE: ["READ", "CREATE", "UPDATE", "DELETE"],
-  BANK_RULE_ENGINE: ["READ", "CREATE", "UPDATE", "DELETE"],
 
   LOAN: ["READ", "CREATE", "UPDATE", "APPROVE", "REJECT"],
 };
