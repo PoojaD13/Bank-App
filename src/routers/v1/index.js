@@ -7,6 +7,7 @@ const accountRoute = require("./account.route");
 const transactionRoute = require("./transaction.route");
 const roleRoute = require("./role.route");
 const bankRuleEngineRoute = require("./bank-rule.route");
+const requestApprovalRoute = require("./request-approval.route");
 
 const defaultRoute = [
   {
@@ -32,6 +33,10 @@ const defaultRoute = [
   {
     path: "/bank-rule-engine",
     route: bankRuleEngineRoute,
+  },
+  {
+    path: "/request-approval",
+    route: requestApprovalRoute,
   },
 ];
 
