@@ -9,13 +9,14 @@
 
 require("dotenv").config();
 const connectDB = require("./config/db");
+const logger = require("./config/logger");
 
 const app = require("./app");
 
 connectDB();
 
 app.listen(process.env.PORT || 3000, () => {
-  console.log(
+  logger.info(
     `Server is running on port http://localhost:${process.env.PORT || 3000}`,
   );
 });

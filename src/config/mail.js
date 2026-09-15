@@ -1,4 +1,5 @@
 const nodemailer = require("nodemailer");
+const logger = require("./logger");
 
 // creating transpoter using secure Gmail OAuth2 
 // - Starting to connect tot the SMTP server 
@@ -18,9 +19,9 @@ const transporter = nodemailer.createTransport({
 
 transporter.verify((error, success) => {
   if (error) {
-    console.log("Error in mail server connection", error);
+    logger.error("Error in mail server connection", error);
   } else {
-    console.log("Email server is ready to send message");
+    logger.info("Email server is ready to send message");
   }
 });
 
