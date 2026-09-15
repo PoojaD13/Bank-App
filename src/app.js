@@ -13,6 +13,7 @@ const ApiError = require("./utils/ApiError");
 const cookieParser = require("cookie-parser");
 const { errorHandler, errorConverter } = require("./middlewares/error");
 const { authLimit } = require("./middlewares/rate-limit");
+const morgan = require("morgan");
 
 const app = express();
 
@@ -20,6 +21,11 @@ app.use(cookieParser());
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+
+// app.use(morgan("combined"));
+
+app.use(morgan(":method :url :status - :response-time ms"));
+
 
 if (process.env.NODE_ENV === "production") {
   app.use("/api/v1/auth", authLimit);
