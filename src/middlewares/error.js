@@ -53,10 +53,10 @@
 // 	errorHandler,
 // };
 
-
 const mongoose = require("mongoose");
 const httpStatus = require("http-status").default;
 const ApiError = require("../utils/ApiError");
+const logger = require("../config/logger");
 
 const errorConverter = (err, req, res, next) => {
   let error = err;
@@ -87,9 +87,11 @@ const errorHandler = (err, req, res, next) => {
     ...(process.env.NODE_ENV === "development" && { stack: err.stack }),
   };
 
-  if (process.env.NODE_ENV === "development") {
-    console.error(err.stack);
-  }
+  logger.error(err);
+
+  // if (process.env.NODE_ENV === "development") {
+  //   console.error(err.stack);
+  // }
 
   res.status(statusCode).send(response);
 };

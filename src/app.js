@@ -26,7 +26,6 @@ app.use(express.json());
 
 app.use(morgan(":method :url :status - :response-time ms"));
 
-
 if (process.env.NODE_ENV === "production") {
   app.use("/api/v1/auth", authLimit);
 }
