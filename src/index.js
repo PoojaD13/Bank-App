@@ -9,11 +9,14 @@
 
 require("dotenv").config();
 const connectDB = require("./config/db");
+const { connectRabbitMQ } = require("./config/rabbitmq");
 const logger = require("./config/logger");
 
 const app = require("./app");
 
 connectDB();
+
+connectRabbitMQ();
 
 app.listen(process.env.PORT || 3000, () => {
   logger.info(
