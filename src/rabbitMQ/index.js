@@ -1,8 +1,6 @@
 const { getChannel } = require("../config/rabbitmq");
 
-// const {
-//   setupTransactionExchange,
-// } = require("./exchanges/transaction.exchange");
+
 
 const { setupTransactionQueue } = require("./queues/transaction-queue");
 
@@ -13,10 +11,6 @@ const { setupTransactionDLQ } = require("./dlq/transaction-dlq");
 async function initializeRabbitMQ() {
   const channel = getChannel();
 
-  /*
-   * Exchange first
-   */
-  //   await setupTransactionExchange(channel);
 
   /*
    * DLX + DLQ

@@ -1,5 +1,5 @@
 const { EXCHANGE_NAME, QUEUE_NAME, ROUTING_KEY } = require("../constants");
-// const { setupTransactionExchange } = require("../exchanges/exchange");
+
 
 const setupTransactionQueue = async (channel) => {
   // Exchange setup
