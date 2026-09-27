@@ -16,6 +16,10 @@ const requestApprovalService = require("./request-approval.service");
 const emailService = require("./email.service");
 const { approvalAction } = require("../constant/approval-action");
 
+const {
+  publishTransactionCompleted,
+} = require("../rabbitMQ/publishers/transaction-publisher");
+
 const excuteTransaction = async (id) => {
   let existTxn = await Transaction.findById(id);
   if (existTxn.status !== transactionStatus.pending) {
@@ -63,6 +67,7 @@ const excuteTransaction = async (id) => {
 
       existTxn.status = transactionStatus.completed;
       await existTxn.save({ session });
+      // publisher her
     });
   } catch (err) {
     existTxn.status = transactionStatus.failed;
@@ -93,7 +98,7 @@ const createTxn = async (body) => {
     if (isTransactionExist.status === transactionStatus.completed) {
       throw new ApiError(
         httpStatus.BAD_REQUEST,
-        `Transaction already completed ${isTransactionExist}`,
+        `Transaction already completed ${isTransactionExist._id}`,
       );
     } else if (isTransactionExist.status === transactionStatus.pending) {
       throw new ApiError(
@@ -118,6 +123,7 @@ const createTxn = async (body) => {
       const fromAccountExist = await accountService.getAccountDetails(
         body.fromAccountNo,
       );
+
       const toAccountExist = await accountService.getAccountDetails(
         body.toAccountNo,
       );
@@ -215,6 +221,9 @@ const createTxn = async (body) => {
 
           txn.status = transactionStatus.completed;
           await txn.save({ session });
+
+          // publish mail event here.
+          await publishTransactionCompleted(toAccountExist, txn);
         });
       } catch (err) {
         txn = await Transaction.updateOne(
@@ -297,11 +306,7 @@ const createTxn = async (body) => {
       break;
     }
   }
-  // // to send the email
-  // if (body.transferType != transactionTypes.deposit) {
-  //   emailService.sendTransactionEmail(fromAccountExist.email, body.amount,transferType.);
-  // }
-  // emailService.sendTransactionEmail;
+
   return txn;
 };
 
@@ -321,6 +326,7 @@ const getAllTransaction = async (accNo, filter, options) => {
   const data = await Transaction.paginate(filter, options);
   return data;
 };
+
 const getTransactionById = async (id, userId) => {
   // 1. Get the logged-in user's account details
   const acc = await accountService.getAccountOfLogginedUserById(userId);

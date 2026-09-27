@@ -26,7 +26,7 @@ const getAccountDetails = async (accountNumber) => {
   const acc = await Account.findOne({
     accountNumber,
     status: accountStatus.active,
-  });
+  }).populate("userId");
   if (!acc) {
     throw new ApiError(httpStatus.NOT_FOUND, "Account not found");
   }

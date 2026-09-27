@@ -1,8 +1,8 @@
 const nodemailer = require("nodemailer");
 const logger = require("./logger");
 
-// creating transpoter using secure Gmail OAuth2 
-// - Starting to connect tot the SMTP server 
+// creating transpoter using secure Gmail OAuth2
+// - Starting to connect tot the SMTP server
 const transporter = nodemailer.createTransport({
   service: "gmail",
   auth: {
@@ -13,7 +13,6 @@ const transporter = nodemailer.createTransport({
     refreshToken: process.env.REFRESH_TOKEN,
   },
 });
-
 
 // to verify the connection configuration
 
