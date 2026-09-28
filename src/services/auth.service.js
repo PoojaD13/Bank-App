@@ -9,7 +9,6 @@ const {
 
 const register = async (body) => {
   const user = await userService.createUser(body);
-
   await publishRegister(user);
   return user;
 };
@@ -19,7 +18,8 @@ const login = async (body) => {
   if (!user || !user.comparePassword(body.password)) {
     throw new ApiError(httpStatus.BAD_REQUEST, "Email or password is wrong");
   }
-  return user;
+  const token = await tokenService.generateToken(user);
+  return {user, token};
 };
 
 module.exports = {

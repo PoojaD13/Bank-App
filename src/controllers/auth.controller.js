@@ -7,16 +7,14 @@ const register = catchAsync(async (req, res) => {
   const { body } = req;
   const user = await authService.register(body);
   if (!user) {
-    return (new ApiError(httpStatus.BAD_REQUEST, "User registration failed"));
+    return new ApiError(httpStatus.BAD_REQUEST, "User registration failed");
   }
   res.status(httpStatus.CREATED).send(user);
 });
 
 const login = catchAsync(async (req, res) => {
   const { body } = req;
-  const user = await authService.login(body);
-
-  const token = await tokenService.generateToken(user);
+  const { user, token } = await authService.login(body);
 
   const jwtCookieOptions = {
     httpOnly: true,
