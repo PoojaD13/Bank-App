@@ -46,8 +46,18 @@ const refresh = catchAsync(async (req, res) => {
   res.send({ accessToken: token.token });
 });
 
+const logout = catchAsync(async (req, res) => {
+  res.clearCookie("refresh", {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "lax",
+  });
+  res.send({ message: "Logged out successfully" });
+});
+
 module.exports = {
   register,
   login,
   refresh,
+  logout,
 };

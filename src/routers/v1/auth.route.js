@@ -14,6 +14,8 @@ router.post(
 router.post("/login", validate(authValidation.login), authController.login);
 router.post("/refresh", authController.refresh);
 
+router.post("/logout", authController.logout);
+
 // refresh token and logout enpoint
 
 module.exports = router;
