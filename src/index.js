@@ -11,10 +11,13 @@ require("dotenv").config();
 const connectDB = require("./config/db");
 const { connectRabbitMQ } = require("./config/rabbitmq");
 const logger = require("./config/logger");
+const { connectRedis } = require("./config/redis");
 
 const app = require("./app");
 
 connectDB();
+
+connectRedis();
 
 connectRabbitMQ();
 

@@ -26,6 +26,7 @@
     "mongoose-paginate-v2": "^1.9.5",
     "morgan": "^1.12.1",
     "nodemailer": "^9.0.6",
+    "redis": "^6.2.1",
     "winston": "^3.19.0"
   }
 }
