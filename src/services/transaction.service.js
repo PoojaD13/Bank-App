@@ -42,6 +42,14 @@ const excuteTransaction = async (id) => {
 
   const session = await mongoose.startSession();
 
+  const acc = await accountService.getAccountDetails(existTxn.fromAccount);
+  if (!acc) {
+    throw new ApiError(
+      httpStatus.BAD_REQUEST,
+      "Account doesnt exist or inactive",
+    );
+  }
+
   try {
     await session.withTransaction(async () => {
       // check for the balance
@@ -68,6 +76,7 @@ const excuteTransaction = async (id) => {
       existTxn.status = transactionStatus.completed;
       await existTxn.save({ session });
       // publisher her
+      await publishTransactionCompleted(acc, existTxn);
     });
   } catch (err) {
     existTxn.status = transactionStatus.failed;
@@ -177,6 +186,8 @@ const createTxn = async (body) => {
 
           txn.status = transactionStatus.completed;
           await txn.save({ session });
+          await publishTransactionCompleted(fromAccountExist, txn);
+          await publishTransactionCompleted(toAccountExist, txn);
         });
       } catch (err) {
         txn = await Transaction.updateOne(
@@ -290,6 +301,8 @@ const createTxn = async (body) => {
 
           txn.status = transactionStatus.completed;
           await txn.save({ session });
+
+          await publishTransactionCompleted(fromAccountExist, txn);
         });
       } catch (err) {
         txn = await Transaction.updateOne(
