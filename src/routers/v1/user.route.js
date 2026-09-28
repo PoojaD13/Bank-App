@@ -19,12 +19,18 @@ router
   .get(
     auth,
     checkRights(modulesName.employee, ["READ"]),
-    validate(userValidation.getUser),
-    userController.getUser,
+    validate(userValidation.getAllUser),
+    userController.getAllUser,
   );
 
 router
   .route("/management/:id")
+  .get(
+    auth,
+    checkRights(modulesName.employee, ["READ"]),
+    validate(userValidation.getUserById),
+    userController.getUserById,
+  )
   .patch(
     auth,
     checkRights(modulesName.employee, ["UPDATE"]),
@@ -38,14 +44,14 @@ router
     userController.deleteUser,
   );
 
-router
-  .route("/management/all")
-  .get(
-    auth,
-    checkRights(modulesName.employee, ["READ"]),
-    validate(userValidation.getAllUser),
-    userController.getAllUser,
-  );
+// router
+//   .route("/management/all")
+// .get(
+//   auth,
+//   checkRights(modulesName.employee, ["READ"]),
+//   validate(userValidation.getAllUser),
+//   userController.getAllUser,
+// );
 
 router.route("/profile").get(auth, userController.getLogginedUser);
 module.exports = router;

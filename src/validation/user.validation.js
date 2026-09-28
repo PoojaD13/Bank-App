@@ -1,6 +1,13 @@
 const Joi = require("joi");
 const { userType, userTypeValues } = require("../constant/user-type");
 
+const objectId = (value, helpers) => {
+  if (!value.match(/^[0-9a-fA-F]{24}$/)) {
+    return helpers.message('"{{#label}}" must be a valid mongo id');
+  }
+  return value;
+};
+
 const createUser = {
   body: Joi.object().keys({
     email: Joi.string().email().required(),
@@ -17,11 +24,9 @@ const createUser = {
   }),
 };
 
-const getUser = {
-  query: Joi.object().keys({
-    sortBy: Joi.string(),
-    limit: Joi.number().integer(),
-    page: Joi.number().integer(),
+const getUserById = {
+  params: Joi.object().keys({
+    id: Joi.string().custom(objectId).required(),
   }),
 };
 
@@ -56,7 +61,7 @@ const deleteUser = {
 
 module.exports = {
   createUser,
-  getUser,
+  getUserById,
   deleteUser,
   updateUser,
   getAllUser,

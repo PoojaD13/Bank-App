@@ -1,5 +1,6 @@
 const httpStatus = require("http-status").default;
 const ApiError = require("../utils/ApiError");
+const { cacheKeyValue, cacheService } = require("../cached");
 
 const roleService = require("./role.service");
 const { User } = require("../models");
@@ -10,11 +11,24 @@ const getUserByEmail = async (email) => {
 };
 
 const getUserById = async (id) => {
-  return User.findOne({ _id: id, isActive: true }).populate("roleId");
+  const key = cacheKeyValue.cacheKeys.user(id);
+
+  const cachedUser = await cacheService.getCachedData(key);
+  if (cachedUser) {
+    return cachedUser;
+  }
+
+  const user = await User.findOne({ _id: id, isActive: true }).populate(
+    "roleId",
+  );
+  if (user) {
+    await cacheService.setCacheData(key, user);
+  }
+  return user;
 };
 
 const getUserByEamilAndPassword = async (email) => {
-  return User.findOne({ email }).select("+password");
+  return await User.findOne({ email }).select("+password");
 };
 
 /**
@@ -42,12 +56,12 @@ const createUser = async (body) => {
 };
 
 const getUser = async () => {
-  return User.find({ isActive: true });
+  return await User.find({ isActive: true });
 };
 
 const getAllUser = async (filter, options) => {
   filter.isActive = true;
-  return User.paginate(filter, options);
+  return await User.paginate(filter, options);
   // return User.find({ isActive: true });
 };
 
@@ -56,14 +70,14 @@ const updateUser = async (params, body) => {
   if (body?.roleId && user.userType !== userType.employee) {
     throw new ApiError(httpStatus.BAD_REQUEST, "Only employee can have role");
   }
-  return User.findByIdAndUpdate({ _id: params.id }, body, { new: true });
+  return await User.findByIdAndUpdate({ _id: params.id }, body, { new: true });
 };
 const deleteUser = async (id) => {
   const user = await getUserById(id);
   if (!user) {
     throw new ApiError(httpStatus.NOT_FOUND, "User not found/ doesnt exist");
   }
-  return User.findByIdAndUpdate(
+  return await User.findByIdAndUpdate(
     { _id: id },
     { isActive: false },
     { new: true },
