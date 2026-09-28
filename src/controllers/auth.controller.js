@@ -29,7 +29,25 @@ const login = catchAsync(async (req, res) => {
   res.send({ user: user, accessToken: token.token });
 });
 
+const refresh = catchAsync(async (req, res) => {
+  const refreshToken = req.cookies.refresh;
+  const token = await authService.refreshAccessToken(refreshToken);
+
+  const jwtCookieOptions = {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "lax",
+    expires: new Date(
+      Date.now() +
+        parseInt(process.env.REFRESH_TOKEN_EXPIRE_IN) * 24 * 60 * 60 * 1000,
+    ),
+  };
+  res.cookie("refresh", token.refreshToken, jwtCookieOptions);
+  res.send({ accessToken: token.token });
+});
+
 module.exports = {
   register,
   login,
+  refresh,
 };

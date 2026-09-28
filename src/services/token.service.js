@@ -8,19 +8,39 @@ const signToken = async (userId, type, secret, expiresIn) => {
   return jwt.sign(payload, secret, { expiresIn });
 };
 
-const generateToken = async (user) => {
-  const accessToken = await signToken(
+const generateAccessToken = async (user) => {
+  return await signToken(
     user._id,
     "access",
     process.env.ACCESS_TOKEN_SECRET,
     process.env.ACCESS_TOKEN_EXPIRE_IN,
   );
-  const refreshToken = await signToken(
+};
+
+const generateRefreshToken = async (user) => {
+  return await signToken(
     user._id,
     "refresh",
     process.env.REFRESH_TOKEN_SECRET,
     process.env.REFRESH_TOKEN_EXPIRE_IN,
   );
+};
+
+const generateToken = async (user) => {
+  // const accessToken = await signToken(
+  //   user._id,
+  //   "access",
+  //   process.env.ACCESS_TOKEN_SECRET,
+  //   process.env.ACCESS_TOKEN_EXPIRE_IN,
+  // );
+  // const refreshToken = await signToken(
+  //   user._id,
+  //   "refresh",
+  //   process.env.REFRESH_TOKEN_SECRET,
+  //   process.env.REFRESH_TOKEN_EXPIRE_IN,
+  // );
+  const accessToken = await generateAccessToken(user);
+  const refreshToken = await generateRefreshToken(user);
 
   return {
     token: accessToken,
@@ -28,16 +48,12 @@ const generateToken = async (user) => {
   };
 };
 
-// const generateRefreshToken = async (user) => {
-//   const payload = {
-//     sub: user._id,
-//     type: "refresh",
-//   };
-//   return jwt.sign(payload, process.env.REFRESH_TOKEN_SECRET, {
-//     expiresIn: process.env.REFRESH_TOKEN_EXPIRE_IN,
-//   });
-// };
+const verifyRefreshToken = (token) => {
+  return jwt.verify(token, process.env.REFRESH_TOKEN_SECRET);
+};
 
 module.exports = {
   generateToken,
+  generateRefreshToken,
+  verifyRefreshToken,
 };

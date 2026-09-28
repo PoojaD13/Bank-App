@@ -19,10 +19,31 @@ const login = async (body) => {
     throw new ApiError(httpStatus.BAD_REQUEST, "Email or password is wrong");
   }
   const token = await tokenService.generateToken(user);
-  return {user, token};
+  return { user, token };
 };
 
+const refreshAccessToken = async (refreshToken) => {
+  if (!refreshToken) {
+    throw new ApiError(httpStatus.UNAUTHORIZED, "Refresh token is required");
+  }
+  let decode;
+  try {
+    decode = tokenService.verifyRefreshToken(refreshToken);
+  } catch (error) {
+    throw new ApiError(httpStatus.UNAUTHORIZED, "invalid refresh token");
+  }
+  if (decode.type !== "refresh") {
+    throw new ApiError(httpStatus.UNAUTHORIZED, "invalid refresh token");
+  }
+  const user = await userService.getUserById(decode.userId);
+  if (!user) {
+    throw new ApiError(httpStatus.BAD_REQUEST, "User no longer exist");
+  }
+  const token = await tokenService.generateToken(user);
+  return token;
+};
 module.exports = {
   register,
   login,
+  refreshAccessToken,
 };
