@@ -10,7 +10,7 @@ const register = catchAsync(async (req, res) => {
     return (new ApiError(httpStatus.BAD_REQUEST, "User registration failed"));
   }
   res.status(httpStatus.CREATED).send(user);
-  await emailService.sendRegistrationEmail(user.email, user.name);
+ // await emailService.sendRegistrationEmail(user.email, user.name);
 });
 
 const login = catchAsync(async (req, res) => {

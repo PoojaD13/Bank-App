@@ -3,9 +3,14 @@ const ApiError = require("../utils/ApiError");
 
 const userService = require("./user.service");
 const tokenService = require("./token.service");
+const {
+  publishRegister,
+} = require("../rabbitMQ/publishers/register-publisher");
 
 const register = async (body) => {
   const user = await userService.createUser(body);
+
+  await publishRegister(user);
   return user;
 };
 

@@ -1,5 +1,10 @@
 require("dotenv").config();
 
+/***
+ * This file acts as a dedicated, long-running background process.
+ * worker process that sits in the background, waits for messages to arrive in RabbitMQ, and passes them to your consumer files to be processed. It does not do anything else.
+ */
+
 const { connectRabbitMQ, closeRabbitMQ } = require("../config/rabbitmq");
 
 const { initializeRabbitMQ } = require("./index");
@@ -7,6 +12,7 @@ const { initializeRabbitMQ } = require("./index");
 const {
   startTransactionConsumer,
 } = require("./consumers/transaction-consumer");
+const { startRegisterConsumer } = require("./consumers/register-consumer");
 
 let shuttingDown = false;
 
@@ -27,6 +33,7 @@ async function startWorker() {
      * 3. Start all consumers
      */
     await startTransactionConsumer(channel);
+    await startRegisterConsumer(channel);
 
     // Add future consumers here
     //
