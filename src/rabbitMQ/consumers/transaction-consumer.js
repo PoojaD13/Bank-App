@@ -60,18 +60,12 @@ async function publishRetry(channel, message, retryCount) {
     },
   );
 
-  /*
-   * publish() returning false means
-   * the channel write buffer is full.
-   *
-   * Do not ACK the original message.
-   */
   if (!published) {
     throw new Error("RabbitMQ publisher buffer is full");
   }
 
   /*
-   * Wait until RabbitMQ confirms
+   * Waiting until RabbitMQ confirms
    * that the retry message was accepted.
    */
   await channel.waitForConfirms();
@@ -99,19 +93,14 @@ async function startTransactionConsumer(channel) {
          */
         validateMessage(data);
 
-        /*
-         * 3. Actual business work
-         *
-         * RabbitMQ consumer should not
-         * contain email logic.
-         */
+        /*Testing purpose */
 
-        console.log(
-          "transaction.consumer.js file data",
-          data,
-          data.user,
-          data.transaction,
-        );
+        // console.log(
+        //   "transaction.consumer.js file data",
+        //   data,
+        //   data.user,
+        //   data.transaction,
+        // );
         await emailService.sendTransactionEmail(data.user, data.transaction);
 
         /*

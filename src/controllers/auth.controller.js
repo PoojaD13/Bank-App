@@ -1,7 +1,7 @@
 const httpStatus = require("http-status").default;
 const catchAsync = require("../utils/catchAsync");
 const ApiError = require("../utils/ApiError");
-const { authService, tokenService, emailService } = require("../services");
+const { authService, tokenService } = require("../services");
 
 const register = catchAsync(async (req, res) => {
   const { body } = req;
@@ -10,7 +10,6 @@ const register = catchAsync(async (req, res) => {
     return (new ApiError(httpStatus.BAD_REQUEST, "User registration failed"));
   }
   res.status(httpStatus.CREATED).send(user);
- // await emailService.sendRegistrationEmail(user.email, user.name);
 });
 
 const login = catchAsync(async (req, res) => {

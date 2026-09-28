@@ -12,15 +12,6 @@ for (const [key, value] of Object.entries(modulePermissions)) {
   }
 }
 
-// Object.entries(modulePermissions).forEach(([moduleName, allowedActions]) => { // key, value
-//   if (Array.isArray(allowedActions)) {
-//     console.log(`Module: ${moduleName}, Allowed Actions: ${allowedActions}`);
-//     moduleSchemaRule[moduleName] = Joi.array()
-//       .items(Joi.string().valid(...allowedActions))
-//       .unique();
-//   }
-// });
-
 const createRole = {
   body: Joi.object().keys({
     roleName: Joi.string().required().lowercase(),

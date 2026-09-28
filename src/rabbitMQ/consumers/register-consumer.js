@@ -36,40 +36,6 @@ function validateMessage(data) {
   }
 }
 
-// async function publishRetry(channel, message, retryCount) {
-//   const headers = {
-//     ...(message.properties.headers || {}),
-//     "x-retry-count": retryCount,
-//   };
-
-//   const published = channel.publish(
-//     EXCHANGE_NAME.RETRY,
-//     ROUTING_KEY.TRANSACTION_RETRY,
-//     message.content,
-//     {
-//       persistent: true,
-//       contentType: message.properties.contentType || "application/json",
-//       messageId: message.properties.messageId,
-//       headers,
-//     },
-//   );
-
-//   /*
-//    * publish() returning false means
-//    * the channel write buffer is full.
-//    *
-//    * Do not ACK the original message.
-//    */
-//   if (!published) {
-//     throw new Error("RabbitMQ publisher buffer is full");
-//   }
-
-//   /*
-//    * Wait until RabbitMQ confirms
-//    * that the retry message was accepted.
-//    */
-//   await channel.waitForConfirms();
-// }
 
 async function startRegisterConsumer(channel) {
   await channel.prefetch(10);
@@ -89,8 +55,9 @@ async function startRegisterConsumer(channel) {
         validateMessage(data);
 
         // for testing purpose
+       // console.log("register.consumer.js file data", data.data);
 
-        console.log("register.consumer.js file data", data.data);
+
         await emailService.sendRegistrationEmail(
           data.data.email,
           data.data.name,

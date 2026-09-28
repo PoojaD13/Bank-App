@@ -33,10 +33,11 @@ const publishTransactionCompleted = async (user, transaction) => {
     },
   );
   if (!published) {
-    throw new ApiError(
-      httpStatus.INTERNAL_SERVER_ERROR,
-      "Failed to publish transaction completed event",
-    );
+    logger.error( "Failed to publish transaction completed event",)
+    // throw new ApiError(
+    //   httpStatus.INTERNAL_SERVER_ERROR,
+    //   "Failed to publish transaction completed event",
+    // );
   }
   try {
     await channel.waitForConfirms();

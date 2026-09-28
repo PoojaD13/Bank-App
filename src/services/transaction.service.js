@@ -360,5 +360,3 @@ module.exports = {
   excuteTransaction,
   getTransactionById,
 };
-
-// have to resolve the the logineed person id is same and also the tnx status inconsistency is their test it

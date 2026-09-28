@@ -35,11 +35,6 @@ async function startWorker() {
     await startTransactionConsumer(channel);
     await startRegisterConsumer(channel);
 
-    // Add future consumers here
-    //
-    // await startNotificationConsumer(channel);
-    // await startSomethingConsumer(channel);
-
     console.log("RabbitMQ worker started successfully");
   } catch (error) {
     console.error("RabbitMQ worker startup failed:", error);

@@ -30,7 +30,6 @@ const excuteTxn = catchAsync(async (req, res) => {
   res.send(result);
 });
 
-const getTransactionOfloginedUser = catchAsync();
 
 const getTransactionById = catchAsync(async (req, res) => {
   const id = req.params.id;
