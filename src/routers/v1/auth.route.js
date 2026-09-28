@@ -16,6 +16,5 @@ router.post("/refresh", authController.refresh);
 
 router.post("/logout", authController.logout);
 
-// refresh token and logout enpoint
 
 module.exports = router;
