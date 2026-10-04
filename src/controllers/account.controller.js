@@ -18,6 +18,12 @@ const getAccounts = catchAsync(async (req, res) => {
   res.send(accounts);
 });
 
+const getAccountById = catchAsync(async (req, res) => {
+  const { params } = req;
+  const account = await accountService.getAccountById(params.id);
+  res.send(account);
+});
+
 const getAccountByAccountNumber = catchAsync(async (req, res) => {
   const { accountNumber } = req.params;
   const account = await accountService.getAccountDetails(accountNumber);
@@ -25,7 +31,8 @@ const getAccountByAccountNumber = catchAsync(async (req, res) => {
 });
 
 const getAccountOfLogginedUser = catchAsync(async (req, res) => {
-  const userId = req.user.id;
+  const userId = req.user._id;
+  // console.log(userId)
   const acc = await accountService.getAccountOfLogginedUserById(userId);
   res.send(acc);
 });
@@ -58,4 +65,5 @@ module.exports = {
   getBalanceOfLogginedUserById,
   updateAccount,
   closeAccount,
+  getAccountById,
 };

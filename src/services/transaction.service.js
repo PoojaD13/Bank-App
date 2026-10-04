@@ -353,8 +353,8 @@ const getTransactionById = async (id, userId) => {
     $or: [{ fromAccount: acc._id }, { toAccount: acc._id }],
   });
 
-  // 3. Fixed the typo from 'tnx' to 'txn'
-  console.log(txn);
+
+  // console.log(txn);
 
   if (!txn) {
     throw new ApiError(

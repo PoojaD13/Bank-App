@@ -25,7 +25,6 @@ const queryRules = async (filter, options) => {
 };
 
 const getRuleById = async (id) => {
-  console.log(id);
   const data = await BankRuleEngine.findOne({
     _id: id,
     isArchive: false,

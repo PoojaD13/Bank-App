@@ -28,6 +28,7 @@ router
 router.get("/myAccount", auth, accountController.getAccountOfLogginedUser);
 router.get("/myBalance", auth, accountController.getBalanceOfLogginedUserById);
 
+
 router
   .route("/:accountNumber")
   .get(
@@ -43,7 +44,9 @@ router
     accountController.updateAccount,
   );
 
-  router.route("/close/:accountNumber").patch(
+router
+  .route("/close/:accountNumber")
+  .patch(
     auth,
     checkRights(modulesName.account, ["CLOSE"]),
     validate(accountValidation.closeAccounts),

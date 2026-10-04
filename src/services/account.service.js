@@ -4,6 +4,7 @@ const ApiError = require("../utils/ApiError");
 const { Account, Ledger } = require("../models");
 const { ledgerTypes } = require("../constant/ledger-types");
 const { accountStatus } = require("../constant/account-status");
+const { cacheKeyValue, cacheService } = require("../cached");
 
 const createAccount = async (id, body) => {
   const accountNumber = await generateAccountNumber();
@@ -19,9 +20,20 @@ const createAccount = async (id, body) => {
 
 // acc id
 const getAccountById = async (id) => {
-  return Account.findOne({ _id: id, status: accountStatus.active });
+  const key = cacheKeyValue.cacheKeys.account(id);
+
+  const cData = await cacheService.getCachedData(key);
+  if (cData) {
+    return cData;
+  }
+  const acc = await Account.findOne({ _id: id, status: accountStatus.active }).populate("userId");
+  if (acc) {
+    await cacheService.setCacheData(key, acc);
+  }
+  return acc;
 };
 
+// this three function can be made as one 
 const getAccountDetails = async (accountNumber) => {
   const acc = await Account.findOne({
     accountNumber,

@@ -41,10 +41,10 @@ const disconnectRedis = async () => {
 };
 // connectRedis();
 // if node js instance is terminated then we need to close the connection to redis
-process.on("SIGINT", async () => {
-  console.log("SIGINT signal received: closing Redis client");
-  await redisClient.quit();
-  process.exit(0);
-});
+// process.on("SIGINT", async () => {
+//   console.log("SIGINT signal received: closing Redis client");
+//   await redisClient.quit();
+//   process.exit(0);
+// });
 
 module.exports = { redisClient, connectRedis, disconnectRedis };
