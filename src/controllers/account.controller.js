@@ -38,7 +38,7 @@ const getAccountOfLogginedUser = catchAsync(async (req, res) => {
 });
 
 const getBalanceOfLogginedUserById = catchAsync(async (req, res) => {
-  const userId = req.user.id;
+  const userId = req.user._id;
   const userAccount = await accountService.getAccountOfLogginedUserById(userId);
   const bal = await accountService.getAccountBalance(userAccount._id);
   res.send({ Balance: bal });

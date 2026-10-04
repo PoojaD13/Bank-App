@@ -34,7 +34,7 @@ const excuteTxn = catchAsync(async (req, res) => {
 const getTransactionById = catchAsync(async (req, res) => {
   const id = req.params.id;
 
- const userId = req.user.id;
+ const userId = req.user._id;
   const result = await transactionService.getTransactionById(id, userId);
   res.send(result);
 });

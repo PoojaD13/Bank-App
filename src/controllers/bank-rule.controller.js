@@ -5,7 +5,7 @@ const { bankRuleService } = require("../services");
 
 const createRule = catchAsync(async (req, res) => {
   const { body } = req;
-  body.createdBy = req.user.id;
+  body.createdBy = req.user._id;
   const rule = await bankRuleService.createRule(body);
   res.status(201).send(rule);
 });
@@ -32,7 +32,7 @@ const getRuleById = catchAsync(async (req, res) => {
 
 const updateRule = catchAsync(async (req, res) => {
   const { body, params } = req;
-  body.updatedBy = req.user.id;
+  body.updatedBy = req.user._id;
   const rule = await bankRuleService.updateRuleById(params.id, body);
   res.send(rule);
 });
