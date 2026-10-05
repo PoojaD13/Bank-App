@@ -9,11 +9,15 @@ const roleRoute = require("./role.route");
 const bankRuleEngineRoute = require("./bank-rule.route");
 const requestApprovalRoute = require("./request-approval.route");
 const healthRoute = require("./health.route");
-
+const metricsRoutes = require("./metrics.route");
 const defaultRoute = [
   {
     path: "/health",
     route: healthRoute,
+  },
+  {
+    path: "/metrics",
+    route: metricsRoutes,
   },
   {
     path: "/auth",

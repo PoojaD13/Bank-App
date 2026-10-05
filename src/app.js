@@ -14,6 +14,7 @@ const cookieParser = require("cookie-parser");
 const { errorHandler, errorConverter } = require("./middlewares/error");
 const { authLimit } = require("./middlewares/rate-limit");
 const morgan = require("morgan");
+const metricsMiddleware = require("./middlewares/metrics.middleware");
 
 const app = express();
 
@@ -29,6 +30,9 @@ app.use(morgan(":method :url :status - :response-time ms"));
 if (process.env.NODE_ENV === "production") {
   app.use("/api/v1/auth", authLimit);
 }
+
+// metrics middleware
+app.use(metricsMiddleware);
 
 // route mounting
 app.use("/api/v1", router);
