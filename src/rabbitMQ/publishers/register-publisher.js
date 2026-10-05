@@ -35,7 +35,7 @@ const publishRegister = async (user) => {
 
   try {
     await channel.waitForConfirms();
-    console.log("Transaction completed event published successfully");
+    console.log("Register event published successfully");
   } catch (e) {
     console.error("Error while waiting for confirms: ", e);
   }
