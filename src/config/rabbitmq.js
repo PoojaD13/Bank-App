@@ -9,14 +9,14 @@ let channel;
 const RABBITMQ_URL = process.env.RABBITMQ_URL || "amqp://localhost";
 
 async function connectRabbitMQ() {
-    console.log("Connecting to RabbitMQ...");
-  if (connection & channel) {
+  console.log("Connecting to RabbitMQ...");
+  if (connection && channel) {
     return channel;
   }
 
   connection = await amqp.connect(RABBITMQ_URL);
 
-  connection.on("error ", (error) => {
+  connection.on("error", (error) => {
     logger.error("Rabbitmq connection error", error);
   });
 
@@ -58,6 +58,11 @@ async function closeRabbitMQ() {
     logger.info("Rabbit mq connection closed gracefully");
   } catch (error) {
     logger.error("Error while closing RabbitMQ ", error);
+    connection = null;
+    channel = null;
+
+    await new Promise((resolve) => setTimeout(resolve, 5000));
+    return connectRabbitMQ(); // Recursive retry call
   }
 }
 module.exports = {
