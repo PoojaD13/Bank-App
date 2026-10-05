@@ -8,8 +8,13 @@ const transactionRoute = require("./transaction.route");
 const roleRoute = require("./role.route");
 const bankRuleEngineRoute = require("./bank-rule.route");
 const requestApprovalRoute = require("./request-approval.route");
+const healthRoute = require("./health.route");
 
 const defaultRoute = [
+  {
+    path: "/health",
+    route: healthRoute,
+  },
   {
     path: "/auth",
     route: authRoute,
