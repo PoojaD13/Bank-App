@@ -6,6 +6,14 @@ services:
       - "8080:8080"
     env_file:
       - .env
+    restart: unless-stopped
+
+    healthcheck:
+      test: ["CMD", "wget","--spider", "-q", "http://localhost:8080/api/v1/health/"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
     depends_on:
       redis:
         condition: service_healthy
@@ -18,6 +26,7 @@ services:
     container_name: bank-worker
     env_file:
       - .env
+    restart: unless-stopped
     command: ["node", "src/rabbitMQ/workers.js"]
     depends_on:
       rabbitmq:
@@ -31,6 +40,7 @@ services:
     ports:
       - "6379:6379"
       - "8001:8001"
+    restart: unless-stopped
     healthcheck:
       test: ["CMD", "redis-cli", "ping"]
       interval: 5s
@@ -43,6 +53,7 @@ services:
     ports:
       - "5672:5672"
       - "15672:15672"
+    restart: unless-stopped
     healthcheck:
       test: ["CMD", "rabbitmq-diagnostics","-q", "ping"]
       interval: 5s
