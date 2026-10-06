@@ -59,3 +59,29 @@ services:
       interval: 5s
       timeout: 5s
       retries: 10
+  
+  prometheus:
+    image: prom/prometheus
+    container_name: bank-prometheus
+    ports:
+      - "9090:9090"
+    restart: unless-stopped
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+  
+  grafana:
+    image: grafana/grafana
+    container_name: bank-grafana
+    ports:
+      - "3000:3000"
+    restart: unless-stopped
+    volumes:
+      - grafana-data:/var/lib/grafana
+
+      # environment:
+    #   - GF_SECURITY_ADMIN_USER=admin
+    #   - GF_SECURITY_ADMIN_PASSWORD=admin
+    
+volumes:
+  grafana-data:
+    
